@@ -27,7 +27,6 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                System.out.println("Working");
 
                 Intent intent = new Intent(NotesActivity.this , MapsActivity.class);
                 startActivity(intent);

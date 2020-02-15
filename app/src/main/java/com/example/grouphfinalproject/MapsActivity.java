@@ -5,8 +5,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
 
@@ -19,6 +25,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -70,6 +78,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         getLocation();
 
+
+        if (!isOnline()){
+
+           AlertDialog.Builder alert = new AlertDialog.Builder(this);
+           alert.setIcon(R.drawable.ic_warning);
+           alert.setTitle("Network Problem");
+           alert.setMessage("Please make sure you are connected to internet");
+
+           alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+               @Override
+               public void onClick(DialogInterface dialog, int which) {
+
+                   Intent intent = new Intent(MapsActivity.this , NotesActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                        startActivity(intent);
+
+
+               }
+
+           });
+            AlertDialog alertDialog = alert.create();
+            alertDialog.show();
+
+
+
+        }
+
+    }
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
     private void getLocation(){
@@ -98,6 +140,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             homeMarker = mMap.addMarker(options);
             markers.add(homeMarker);
+            cameraFocus(userLocation);
 
         if (markers.size() > 1){
             for (Marker marker:markers){
@@ -107,6 +150,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         homeMarker = mMap.addMarker(options);
         markers.add(homeMarker);
+
+    }
+
+    private void cameraFocus(LatLng latLng){
+
+        CameraPosition position = CameraPosition.builder()
+                .target(latLng)
+                .zoom(14)
+                .build();
+
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
+    }
+
+
+    public void setDestMarker(LatLng latLng){
+
+        MarkerOptions options = new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        mMap.addMarker(options);
 
     }
 
@@ -126,6 +189,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
         }
+
+        Double latitude = 43.7732907;
+        Double longitude =-79.335881;
+
+        LatLng latLng = new LatLng(latitude , longitude);
+
+        setDestMarker(latLng);
+
+
 
     }
 }
