@@ -16,12 +16,16 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+
 import java.net.Inet4Address;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
+    SwipeMenuListView listView;
     ImageButton button;
     String category;
 
@@ -61,6 +65,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+
+            }
+        };
+
+
+
     }
 
     private void textAlert(){
@@ -97,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
+
+
+
 
 
 }
