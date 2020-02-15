@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +20,7 @@ import android.widget.ListView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.net.Inet4Address;
@@ -70,12 +73,52 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void create(SwipeMenu menu) {
 
+                SwipeMenuItem delete = new SwipeMenuItem(getApplicationContext());
+
+                delete.setIcon(R.drawable.ic_delete);
+                delete.setBackground(new ColorDrawable(Color.parseColor("#F21717")));
+                delete.setWidth(250);
+                menu.addMenuItem(delete);
             }
         };
+        listView.setMenuCreator(swipeMenuCreator);
+
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+
+                if (index == 0){
+
+
+                    //DataBase delete code
+
+
+
+
+
+
+                    catList.remove(position);
+
+                    arrayAdapter.notifyDataSetChanged();
+
+
+                }
+                return true;
+            }
+        });
+
+        listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+
 
 
 
     }
+
+
+
+
+
 
     private void textAlert(){
 

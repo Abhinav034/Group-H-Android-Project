@@ -2,6 +2,7 @@ package com.example.grouphfinalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -25,7 +26,13 @@ public class NotesActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //make third activity
+
+                System.out.println("Working");
+
+                Intent intent = new Intent(NotesActivity.this , MapsActivity.class);
+                startActivity(intent);
+
+
             }
         });
 
