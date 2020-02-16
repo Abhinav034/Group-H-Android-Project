@@ -28,8 +28,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(NotesActivity.this , MapsActivity.class);
-                startActivity(intent);
+
 
 
             }
