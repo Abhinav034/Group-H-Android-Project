@@ -10,11 +10,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -39,6 +42,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
     LocationCallback locationCallback;
+    ImageButton button;
+    Double olat , olng;
+    Double dlat , dlng;
 
     Marker homeMarker;
 
@@ -68,6 +74,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        button = findViewById(R.id.goButton);
+
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         locationRequest = new LocationRequest();
@@ -75,6 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationRequest.setInterval(3000);
         locationRequest.setSmallestDisplacement(20);
         locationRequest.setFastestInterval(2000);
+
 
         getLocation();
 
@@ -122,6 +132,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onLocationResult(LocationResult locationResult) {
                 for(Location location : locationResult.getLocations()){
 
+                   olat =  location.getLatitude();
+                   olng =  location.getLongitude();
                     setHomeMarker(location);
 
 
@@ -190,14 +202,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
 
-        Double latitude = 43.7732907;
-        Double longitude =-79.335881;
+        dlat = 43.7732907;
+        dlng =-79.335881;
 
-        LatLng latLng = new LatLng(latitude , longitude);
+        LatLng latLng = new LatLng(dlat , dlng);
 
         setDestMarker(latLng);
 
 
 
     }
+
+    public void navButtonPressed(View view) {
+
+        String url = getDirectionsUrl();
+        Object [] dataTransfer = new Object[4];
+
+        dataTransfer[0] = mMap;
+        dataTransfer[1] = url;
+        dataTransfer[2] = new LatLng(dlat , dlng);
+        dataTransfer[3] = new LatLng(olat , olng);
+
+        GetRouteData getRouteData = new GetRouteData();
+        getRouteData.execute(dataTransfer);
+
+    }
+    private String getDirectionsUrl(){
+      StringBuilder stringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
+        stringBuilder.append("origin=" + olat + "," + olng);
+        stringBuilder.append("&destination=" + dlat + "," + dlng);
+        stringBuilder.append("&key=" + getString(R.string.api_key_directions));
+
+        System.out.println(stringBuilder);
+        return stringBuilder.toString();
+    }
+
+
+
 }
