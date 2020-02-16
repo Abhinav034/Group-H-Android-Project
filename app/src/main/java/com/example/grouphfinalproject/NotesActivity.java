@@ -3,7 +3,9 @@ package com.example.grouphfinalproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,12 +16,13 @@ import java.util.ArrayList;
 
 public class NotesActivity extends AppCompatActivity {
 
-    private static final String NOTE_ID = "selectedNoteId" ;
-    ImageButton imageButton , mapButton;
+    public static final String SELECTED_NOTE = "selectedNote" ;
+    ImageButton imageButton, mapButton;
     ListView listView;
     ArrayList<Note> Notes;
 
     private ArrayAdapter arrayAdapter;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class NotesActivity extends AppCompatActivity {
         mapButton = findViewById(R.id.maps);     // just for testing
         listView = findViewById(R.id.notesList);
         Notes = new ArrayList<>();
+        databaseHelper = new DatabaseHelper(this);
 
 
 
@@ -57,7 +61,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent i = new Intent(NotesActivity.this, NoteDetails.class);
-                i.putExtra(NOTE_ID,Notes.get(position).getId());
+                i.putExtra(SELECTED_NOTE,Notes.get(position));
                 startActivity(i);
 
             }
@@ -76,6 +80,39 @@ public class NotesActivity extends AppCompatActivity {
     }
 
     public void refreshList(){
+
+
+        Intent intent = getIntent();
+        String categoryName = intent.getStringExtra(MainActivity.CATEGORY_KEY);
+
+        Cursor cursor = databaseHelper.getAllNotes(categoryName);
+
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                Log.i("DATACHECK", "loadPlaces: "+cursor.getString(2));
+                Notes.add(new Note(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getDouble(5),
+                        cursor.getDouble(6)
+
+
+
+                ));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+
+
+
+
+
 
         // this part has to be replaced by custom adaptor
         String[] titleArray = new String[Notes.size()];
