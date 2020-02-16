@@ -21,6 +21,11 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.example.grouphfinalproject.MainActivity.CATEGORY_KEY;
+import static com.example.grouphfinalproject.MainActivity.CATEGORY_LIST;
+import static com.example.grouphfinalproject.MainActivity.catList;
+import static com.example.grouphfinalproject.MainActivity.sharedPreferences;
+
 public class NoteDetails extends AppCompatActivity {
 
 
@@ -64,7 +69,7 @@ public class NoteDetails extends AppCompatActivity {
             catagory_ET.setText(noteData.getCategory());
 
         }else{
-            categoryName = intent.getStringExtra(MainActivity.CATEGORY_KEY);
+            categoryName = intent.getStringExtra(CATEGORY_KEY);
             catagory_ET.setText(categoryName);
 
         }
@@ -183,11 +188,17 @@ public class NoteDetails extends AppCompatActivity {
 
         // at the end of the function while saving data
 
-        System.out.println(MainActivity.catList);
-        if (!MainActivity.catList.contains(categoryName)){
-            MainActivity.catList.add(categoryName);
+
+        if (!catList.contains(categoryName)){
+            catList.add(categoryName);
+            try {
+                sharedPreferences.edit().putString(CATEGORY_LIST, ObjectSerializer.serialize(catList)).apply();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        System.out.println(MainActivity.catList);
+
 
     }
 
