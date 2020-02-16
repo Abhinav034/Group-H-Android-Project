@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class NotesActivity extends AppCompatActivity {
 
     private static final String NOTE_ID = "selectedNoteId" ;
-    ImageButton imageButton;
+    ImageButton imageButton , mapButton;
     ListView listView;
     ArrayList<Note> Notes;
 
@@ -27,6 +27,7 @@ public class NotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes);
 
         imageButton = findViewById(R.id.addNotes);
+        mapButton = findViewById(R.id.maps);     // just for testing
         listView = findViewById(R.id.notesList);
         Notes = new ArrayList<>();
 
@@ -40,6 +41,15 @@ public class NotesActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NotesActivity.this , MapsActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
