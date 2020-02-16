@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">GroupHFinalProject</string>
     <string name="title_activity_maps">Map</string>
-    <string name="api_key_directions">AIzaSyBGiQRk2AFBObjmIjuCwd2T3xXtmlhYXB8</string>
+    <string name="api_key_directions">Api_key</string>
 </resources>
