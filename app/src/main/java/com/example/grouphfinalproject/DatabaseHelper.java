@@ -68,10 +68,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.insert(TABLE_NAME, null, cv) != -1;
     }
 
-    Cursor getAllPlaces(){
+    Cursor getAllNotes(String category){
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        return sqLiteDatabase.rawQuery("SELECT * from " + TABLE_NAME, null);
+        return sqLiteDatabase.rawQuery("SELECT * from " + TABLE_NAME + " WHERE " + COLUMN_CATEGORY + "=?", new String[]{category});
     }
 
 
@@ -102,6 +102,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     }*/
+
+
+
 
     boolean removeNote(String ColumnName, String Value){
 

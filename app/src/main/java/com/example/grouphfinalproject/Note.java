@@ -2,7 +2,7 @@ package com.example.grouphfinalproject;
 
 import java.io.Serializable;
 
-public class Note {
+public class Note implements Serializable {
 
     private int id;
     private String title, description, category, createdTimeStamp;

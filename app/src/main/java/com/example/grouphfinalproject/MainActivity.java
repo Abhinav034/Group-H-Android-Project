@@ -28,10 +28,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String CATEGORY_KEY = "Selected Category";
     SwipeMenuListView listView;
     ImageButton button;
     String category;
 
+    DatabaseHelper databaseHelper;
     ArrayList<String>catList = new ArrayList<>();
     ArrayAdapter arrayAdapter;
 
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        databaseHelper = new DatabaseHelper(this);
 
         listView = findViewById(R.id.listView);
         button = findViewById(R.id.addButton);
@@ -59,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(MainActivity.this , NotesActivity.class);
-
-
-
-
+                intent.putExtra(CATEGORY_KEY, catList.get(position));
                 startActivity(intent);
 
 
@@ -93,11 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //DataBase delete code
 
-
-
-
-
-
+                    databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
                     catList.remove(position);
 
                     arrayAdapter.notifyDataSetChanged();
