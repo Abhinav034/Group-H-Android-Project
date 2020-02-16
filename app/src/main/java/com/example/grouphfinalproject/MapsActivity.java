@@ -135,7 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                    olat =  location.getLatitude();
                    olng =  location.getLongitude();
-                   // setHomeMarker(location);
+                    setHomeMarker(location);
 
 
                 }
