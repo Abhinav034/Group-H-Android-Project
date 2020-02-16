@@ -20,6 +20,7 @@ public class NotesActivity extends AppCompatActivity {
     ImageButton imageButton, mapButton;
     ListView listView;
     ArrayList<Note> Notes;
+    String categoryName;
 
     private ArrayAdapter arrayAdapter;
     DatabaseHelper databaseHelper;
@@ -42,6 +43,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //make third activity
                 Intent i = new Intent(NotesActivity.this, NoteDetails.class);
+                i.putExtra(MainActivity.CATEGORY_KEY,categoryName);
                 startActivity(i);
             }
         });
@@ -61,7 +63,7 @@ public class NotesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent i = new Intent(NotesActivity.this, NoteDetails.class);
-                i.putExtra(SELECTED_NOTE,Notes.get(position));
+                i.putExtra(SELECTED_NOTE, Notes.get(position));
                 startActivity(i);
 
             }
@@ -82,16 +84,18 @@ public class NotesActivity extends AppCompatActivity {
     public void refreshList(){
 
 
+        Notes.clear();
         Intent intent = getIntent();
-        String categoryName = intent.getStringExtra(MainActivity.CATEGORY_KEY);
+        categoryName = intent.getStringExtra(MainActivity.CATEGORY_KEY);
 
         Cursor cursor = databaseHelper.getAllNotes(categoryName);
+
+
 
 
         if (cursor.moveToFirst()) {
             do {
 
-                Log.i("DATACHECK", "loadPlaces: "+cursor.getString(2));
                 Notes.add(new Note(
                         cursor.getInt(0),
                         cursor.getString(1),
@@ -101,18 +105,10 @@ public class NotesActivity extends AppCompatActivity {
                         cursor.getDouble(5),
                         cursor.getDouble(6)
 
-
-
                 ));
             } while (cursor.moveToNext());
             cursor.close();
         }
-
-
-
-
-
-
 
         // this part has to be replaced by custom adaptor
         String[] titleArray = new String[Notes.size()];

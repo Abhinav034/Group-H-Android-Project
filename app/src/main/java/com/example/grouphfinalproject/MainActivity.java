@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     String category;
 
     DatabaseHelper databaseHelper;
-    ArrayList<String>catList = new ArrayList<>();
+    public static  ArrayList<String> catList = new ArrayList<>();
     ArrayAdapter arrayAdapter;
 
     @Override
@@ -113,9 +113,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        System.out.println(catList);
+        reloadCategoryList();
+    }
+
+    private void reloadCategoryList() {
+
+        System.out.println(catList);
+        arrayAdapter.notifyDataSetChanged();
 
 
-
+    }
 
     private void textAlert(){
 
@@ -133,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
                 category = input.getText().toString();
                 catList.add(category);
-                arrayAdapter.notifyDataSetChanged();
+                reloadCategoryList();
 
             }
         });

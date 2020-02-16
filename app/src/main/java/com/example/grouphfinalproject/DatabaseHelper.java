@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LAT = "Latitude";
     public static final String COLUMN_LNG = "Longitude";
     public static final String COLUMN_CATEGORY = "Category";
-    public static final String COLUMN_TIMESTAMP = "Created Date-Time";
+    public static final String COLUMN_TIMESTAMP = "CreatedDateTime";
 
 
 
@@ -60,8 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cv.put(COLUMN_TITLE, title);
         cv.put(COLUMN_DESCRIPTION, description);
-        cv.put(COLUMN_CATEGORY, description);
-        cv.put(COLUMN_TIMESTAMP, description);
+        cv.put(COLUMN_CATEGORY, category);
+        cv.put(COLUMN_TIMESTAMP, CreatedTimeStamp);
         cv.put(COLUMN_LAT, lat);
         cv.put(COLUMN_LNG, lng);
 
@@ -83,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cv.put(COLUMN_TITLE, title);
         cv.put(COLUMN_DESCRIPTION, description);
-        cv.put(COLUMN_CATEGORY, description);
+        cv.put(COLUMN_CATEGORY, category);
 
 
         return sqLiteDatabase.update(TABLE_NAME, cv, COLUMN_ID + "=?", new String[]{String.valueOf(id)}) > 0 ;
