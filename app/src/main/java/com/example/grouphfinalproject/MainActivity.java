@@ -4,8 +4,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -29,11 +31,14 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static final String CATEGORY_KEY = "Selected Category";
+    public static final String CATEGORY_LIST = "List_of_Catagories";
     SwipeMenuListView listView;
     ImageButton button;
     String category;
 
     DatabaseHelper databaseHelper;
+    public static SharedPreferences sharedPreferences;
+
     public static  ArrayList<String> catList = new ArrayList<>();
     ArrayAdapter arrayAdapter;
 
@@ -43,12 +48,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         databaseHelper = new DatabaseHelper(this);
+        sharedPreferences = this.getSharedPreferences("com.example.grouphfinalproject",Context.MODE_PRIVATE);
+
 
         listView = findViewById(R.id.listView);
         button = findViewById(R.id.addButton);
 
-         arrayAdapter = new ArrayAdapter(this , android.R.layout.simple_list_item_1 , catList);
-         listView.setAdapter(arrayAdapter);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,11 +128,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void reloadCategoryList() {
-
+        catList.clear();
         System.out.println(catList);
+        try {
+            catList = (ArrayList) ObjectSerializer.deserialize(sharedPreferences.getString(CATEGORY_LIST, ObjectSerializer.serialize(new ArrayList<>())));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(catList);
+        arrayAdapter = new ArrayAdapter(this , android.R.layout.simple_list_item_1 , catList);
+        listView.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
-
-
     }
 
     private void textAlert(){
@@ -145,8 +157,16 @@ public class MainActivity extends AppCompatActivity {
 
                 category = input.getText().toString();
                 catList.add(category);
-                reloadCategoryList();
+                System.out.println("first");
+                System.out.println(catList);
 
+                try {
+                    sharedPreferences.edit().putString(CATEGORY_LIST, ObjectSerializer.serialize(catList)).apply();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                reloadCategoryList();
             }
         });
 
@@ -156,12 +176,7 @@ public class MainActivity extends AppCompatActivity {
                 dialog.cancel();
             }
         });
-
-
         alertDialog.show();
-
-
-
     }
 
 
