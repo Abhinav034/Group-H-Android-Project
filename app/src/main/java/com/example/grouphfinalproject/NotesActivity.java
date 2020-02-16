@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class NotesActivity extends AppCompatActivity {
 
     public static final String SELECTED_NOTE = "selectedNote" ;
-    ImageButton imageButton, mapButton;
+    ImageButton imageButton;
     ListView listView;
     ArrayList<Note> Notes;
     String categoryName;
@@ -31,7 +31,6 @@ public class NotesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notes);
 
         imageButton = findViewById(R.id.addNotes);
-        mapButton = findViewById(R.id.maps);     // just for testing
         listView = findViewById(R.id.notesList);
         Notes = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
@@ -47,17 +46,6 @@ public class NotesActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(NotesActivity.this , MapsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

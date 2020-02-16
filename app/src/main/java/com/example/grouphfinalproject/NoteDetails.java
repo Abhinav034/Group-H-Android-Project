@@ -16,7 +16,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,6 +36,7 @@ public class NoteDetails extends AppCompatActivity {
     EditText title_ET, description_ET, catagory_ET;
     DatabaseHelper databaseHelper;
     String categoryName;
+    ImageButton mapButton;
 
     // location manager and listener
     LocationManager locationManager;
@@ -58,12 +62,17 @@ public class NoteDetails extends AppCompatActivity {
 
         //save_BTN = findViewById(R.id.saveBTN);
 
+        mapButton = findViewById(R.id.maps);
+
+        mapButton.setVisibility(View.INVISIBLE);
+
         Intent intent = getIntent();
         noteData = (Note) intent.getSerializableExtra(NotesActivity.SELECTED_NOTE);
 
         if (noteData != null) {
 
             noteExists = true;
+            mapButton.setVisibility(View.VISIBLE);
             title_ET.setText(noteData.getTitle());
             description_ET.setText(noteData.getDescription());
             catagory_ET.setText(noteData.getCategory());
@@ -178,8 +187,12 @@ public class NoteDetails extends AppCompatActivity {
             noteExists = databaseHelper.addNote(title, description, categoryName,
                     currentTimeStamp.format(new Date()),CurrentLocation.getLatitude(), CurrentLocation.getLongitude());
 
-
-            Toast.makeText(this,noteExists ? "Note Saved !!" : "Error in saving Note Data !!", Toast.LENGTH_SHORT).show();
+            if (noteExists){
+                mapButton.setVisibility(View.VISIBLE);
+                Toast.makeText(this , "Notes saved!" , Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this , "Error while saving!" , Toast.LENGTH_SHORT).show();
+            }
 
 
             updateNoteDataVar(); // from null to not null
@@ -219,5 +232,21 @@ public class NoteDetails extends AppCompatActivity {
                     cursor.getDouble(6)
             );
         }
+    }
+
+    public void goToMapsPressed(View view) {
+
+
+        Double lat = noteData.getLatitude();
+        Double lng = noteData.getLongitude();
+
+        Intent intent = new Intent(NoteDetails.this , MapsActivity.class);
+
+        intent.putExtra("lat" , lat);
+        intent.putExtra("lng", lng);
+
+        startActivity(intent);
+
+
     }
 }

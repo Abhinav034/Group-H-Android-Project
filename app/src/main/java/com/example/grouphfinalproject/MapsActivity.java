@@ -74,6 +74,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
         button = findViewById(R.id.goButton);
 
 
@@ -134,7 +135,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                    olat =  location.getLatitude();
                    olng =  location.getLongitude();
-                    setHomeMarker(location);
+                   // setHomeMarker(location);
 
 
                 }
@@ -182,6 +183,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         mMap.addMarker(options);
+        cameraFocus(latLng);
 
     }
 
@@ -200,14 +202,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
-        }
+        }Intent intent = getIntent();
 
-        dlat = 43.7732907;
-        dlng =-79.335881;
+        dlat = intent.getDoubleExtra("lat" , 0);
+        dlng = intent.getDoubleExtra("lng" , 0);
+
+        System.out.println(dlng+","+dlat);
+
 
         LatLng latLng = new LatLng(dlat , dlng);
 
         setDestMarker(latLng);
+
+
 
 
 
