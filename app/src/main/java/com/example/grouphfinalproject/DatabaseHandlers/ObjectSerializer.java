@@ -1,4 +1,4 @@
-package com.example.grouphfinalproject;
+package com.example.grouphfinalproject.DatabaseHandlers;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

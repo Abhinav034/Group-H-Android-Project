@@ -2,4 +2,8 @@
     <string name="app_name">GroupHFinalProject</string>
     <string name="title_activity_maps">Map</string>
     <string name="api_key_directions">Api_key</string>
+    <string name="add_note_title">Enter note title...</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

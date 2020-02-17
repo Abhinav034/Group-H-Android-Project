@@ -1,15 +1,15 @@
-package com.example.grouphfinalproject;
+package com.example.grouphfinalproject.Models;
 
 import java.io.Serializable;
 
-public class Note implements Serializable {
+public class NoteModel implements Serializable {
 
     private int id;
     private String title, description, category, createdTimeStamp;
     private double latitude, longitude;
 
 
-    public Note(int id, String title, String description, String category, String createdTimeStamp, double latitude, double longitude) {
+    public NoteModel(int id, String title, String description, String category, String createdTimeStamp, double latitude, double longitude) {
         this.id = id;
         this.title = title;
         this.description = description;

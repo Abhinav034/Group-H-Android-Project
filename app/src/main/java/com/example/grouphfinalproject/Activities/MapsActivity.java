@@ -1,4 +1,4 @@
-package com.example.grouphfinalproject;
+package com.example.grouphfinalproject.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -10,7 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -19,6 +18,8 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.grouphfinalproject.GetRouteData;
+import com.example.grouphfinalproject.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;

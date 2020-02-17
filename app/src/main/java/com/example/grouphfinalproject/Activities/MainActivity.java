@@ -1,8 +1,7 @@
-package com.example.grouphfinalproject;
+package com.example.grouphfinalproject.Activities;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,18 +13,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
+import com.example.grouphfinalproject.DatabaseHandlers.ObjectSerializer;
+import com.example.grouphfinalproject.R;
 
-import java.net.Inet4Address;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String CATEGORY_KEY = "Selected Category";
     public static final String CATEGORY_LIST = "List_of_Catagories";
     SwipeMenuListView listView;
-    ImageButton button;
+    ImageButton btnAddCategory;
     String category;
 
     DatabaseHelper databaseHelper;
@@ -52,14 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         listView = findViewById(R.id.listView);
-        button = findViewById(R.id.addButton);
+        btnAddCategory = findViewById(R.id.btn_add_category);
 
 
-        button.setOnClickListener(new View.OnClickListener() {
+        btnAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                textAlert();
+                addCategoryAlert();
             }
 
         });
@@ -114,8 +112,6 @@ public class MainActivity extends AppCompatActivity {
         listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
 
 
-
-
     }
 
 
@@ -141,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter.notifyDataSetChanged();
     }
 
-    private void textAlert(){
+    private void addCategoryAlert(){
 
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this );
         alertDialog.setTitle("Add a category");

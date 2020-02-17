@@ -1,4 +1,4 @@
-package com.example.grouphfinalproject;
+package com.example.grouphfinalproject.DatabaseHandlers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -52,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    boolean addNote(String title, String description, String category, String CreatedTimeStamp, double lat, double lng){
+    public boolean addNote(String title, String description, String category, String CreatedTimeStamp, double lat, double lng){
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
@@ -68,14 +68,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.insert(TABLE_NAME, null, cv) != -1;
     }
 
-    Cursor getAllNotes(String category){
+    public Cursor getAllNotes(String category){
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         return sqLiteDatabase.rawQuery("SELECT * from " + TABLE_NAME + " WHERE " + COLUMN_CATEGORY + "=?", new String[]{category});
     }
 
 
-    boolean updateNote(int id, String title, String description, String category){
+    public boolean updateNote(int id, String title, String description, String category){
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
@@ -106,7 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    boolean removeNote(String ColumnName, String Value){
+    public boolean removeNote(String ColumnName, String Value){
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 

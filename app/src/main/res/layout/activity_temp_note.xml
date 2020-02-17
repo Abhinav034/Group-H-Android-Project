@@ -1,67 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NoteDetails">
+    tools:context=".Activities.NoteDetailsActivity">
 
     <EditText
-        android:id="@+id/titleID"
+        android:id="@+id/et_note_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Add Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:hint="@string/add_note_title" />
 
     <EditText
-        android:id="@+id/descriptionID"
+        android:id="@+id/et_note_descp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Add description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleID" />
+        android:layout_below="@id/et_note_category"
+
+        />
 
     <EditText
-        android:id="@+id/catagoryID"
+        android:id="@+id/et_note_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:hint="add catagory"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionID" />
+        android:layout_below="@id/et_note_title"/>
 
     <Button
-        android:id="@+id/saveBTN"
+        android:id="@+id/btn_save_note"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:onClick="saveNotes"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="16dp"
         android:background="@drawable/save_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"/>
 
     <ImageButton
         android:id="@+id/maps"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_margin="16dp"
         android:background="@drawable/rounded_button"
         android:src="@drawable/ic_navigation"
         android:text="Button"
         android:onClick="goToMapsPressed"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_alignParentBottom="true"
         tools:ignore="OnClick" />
 
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</RelativeLayout>
