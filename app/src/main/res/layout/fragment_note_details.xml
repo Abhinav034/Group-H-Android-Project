@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_note_title"
+        android:hint="Enter note title..."
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et_note_category"
+        android:layout_below="@id/et_note_title"
+        android:hint="Enter note category..."
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/et_note_category"
+        android:hint="Description...."
+        android:id="@+id/et_note_descp"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:layout_above="@id/btn_save_note"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_save_note"
+        android:text="Save"
+        android:layout_alignParentBottom="true"
+        android:layout_marginVertical="10dp"
+        />
+</RelativeLayout>
