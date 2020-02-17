@@ -1,49 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/ll_audio"
+    <RelativeLayout
+        android:id="@+id/rl_audio"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_audio"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_mic"
-                android:id="@+id/btn_record"/>
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_stop"
-                android:visibility="gone"
-                android:id="@+id/btn_stop"/>
-        </RelativeLayout>
+            android:orientation="horizontal">
 
-        <Chronometer
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/chronometer"
-            android:layout_marginHorizontal="10dp"
-            android:textSize="18sp"
-            />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-    </LinearLayout>
+                <ImageView
+                    android:id="@+id/btn_record"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_mic" />
 
+                <ImageView
+                    android:id="@+id/btn_stop"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_stop"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <Chronometer
+                android:id="@+id/chronometer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_audio_notes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/ll_audio" />
+
+    </RelativeLayout>
 
     <TextView
-        android:visibility="gone"
+        android:id="@+id/txt_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/txt_audio"
         android:text="Save the note before recording audios."
-        />
+        android:visibility="gone" />
 </RelativeLayout>
