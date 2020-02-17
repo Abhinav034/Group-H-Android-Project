@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
+import java.io.File;
 import java.io.IOException;
 
 public class AudioFragment extends Fragment {
@@ -33,6 +34,8 @@ public class AudioFragment extends Fragment {
     private MediaRecorder myRecorder;
     String path;
     private NoteModel noteModel;
+
+    public static final String TAG = "Audio";
 
     public AudioFragment(NoteModel noteModel) {
         this.noteModel = noteModel;
@@ -58,7 +61,39 @@ public class AudioFragment extends Fragment {
             requestAudioPermission();
 
         if(noteModel != null){
-            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + noteModel.getId() + ".3gp";
+
+//            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + noteModel.getId() + "/_1" + ".3gp";
+
+            File root = Environment.getExternalStorageDirectory();
+            File file = new File(root.getAbsolutePath() + "/" + noteModel.getId());
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+
+
+            File externalStorageDirectory = Environment.getExternalStorageDirectory();
+            File folder = new File(externalStorageDirectory.getAbsolutePath() + "/" + noteModel.getId());
+            File files[] = folder.listFiles();
+            if(files != null) {
+                path = file.getPath() + "/" + noteModel.getId() + "_" + files.length + ".3gp";
+                if (files.length != 0) {
+                    for (int i = 0; i < files.length; i++) {
+                        //here populate your list
+                        Log.i(TAG, "onViewCreated: " + files[i]);
+                    }
+                } else {
+                    //no file available
+                    Log.i(TAG, "onViewCreated: " + "no files");
+
+                }
+            } else{
+                Log.i(TAG, "onViewCreated: null " );
+//                path = file.getPath() + "/" + noteModel.getId() + ".3gp";
+            }
+
+
+
+
 
         } else{
             llAudio.setVisibility(View.GONE);
