@@ -26,6 +26,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.grouphfinalproject.Adapters.AudioNoteAdapter;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
@@ -69,7 +70,9 @@ public class AudioFragment extends Fragment {
         if(!checkAudioPermission())
             requestAudioPermission();
 
+
         if(noteModel != null){
+            Log.i(TAG, "onViewCreated: model not null");
 
 //            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + noteModel.getId() + "/_1" + ".3gp";
 
@@ -77,7 +80,32 @@ public class AudioFragment extends Fragment {
             File file = new File(root.getAbsolutePath() + "/" + noteModel.getId());
             if (!file.exists()) {
                 file.mkdirs();
+            } else{
+                getPaths();
             }
+
+            /*
+//            File root = Environment.getExternalStorageDirectory();
+            File folder = new File(root.getAbsolutePath() + "/" + noteModel.getId());
+            File files[] = folder.listFiles();
+            if(files != null) {
+                path = file.getPath() + "/" + noteModel.getId() + "_" + files.length + ".3gp";
+                Log.i(TAG, "setPath: " + path);
+                if (files.length != 0) {
+                    for (int i = 0; i < files.length; i++) {
+                        //here populate your list
+                        Log.i(TAG, "onViewCreated: " + files[i]);
+                    }
+                } else {
+                    //no file available
+                    Log.i(TAG, "onViewCreated: " + "no files");
+
+                }
+            } else{
+                Log.i(TAG, "onViewCreated: null " );
+            }
+
+             */
 
         } else{
             rlAudio.setVisibility(View.GONE);
@@ -85,10 +113,14 @@ public class AudioFragment extends Fragment {
         }
 
 
+
+
         ivRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(checkAudioPermission()){
+//                    path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/abc.3gp";
+
                     setPath();
                     setMediaRecorder();
                     try{
@@ -135,6 +167,8 @@ public class AudioFragment extends Fragment {
         File files[] = folder.listFiles();
         if(files != null) {
             path = folder.getPath() + "/" + noteModel.getId() + "_" + files.length + ".3gp";
+
+            Log.i(TAG, "setPath: " + path);
             if (files.length != 0) {
                 for (int i = 0; i < files.length; i++) {
                     //here populate your list
@@ -151,6 +185,7 @@ public class AudioFragment extends Fragment {
     }
 
     private void getPaths(){
+        audioPaths.clear();
         File root = Environment.getExternalStorageDirectory();
         File folder = new File(root.getAbsolutePath() + "/" + noteModel.getId());
         File files[] = folder.listFiles();
@@ -170,21 +205,25 @@ public class AudioFragment extends Fragment {
             Log.i(TAG, "onViewCreated: getpaths null " );
         }
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext() , android.R.layout.simple_list_item_1 , audioPaths);
-        lvAudio.setAdapter(arrayAdapter);
+//        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext() , android.R.layout.simple_list_item_1 , audioPaths);
+        AudioNoteAdapter audioNoteAdapter = new AudioNoteAdapter(getContext(), audioPaths);
+        lvAudio.setAdapter(audioNoteAdapter);
     }
 
     private void requestAudioPermission() {
         ActivityCompat.requestPermissions(getActivity(), new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.RECORD_AUDIO
         }, AUDIO_REQUEST_CODE);
     }
 
     private boolean checkAudioPermission() {
         int write_external_storage_result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int read_external_storage_result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
         int record_audio_result = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO);
         return write_external_storage_result == PackageManager.PERMISSION_GRANTED &&
+                read_external_storage_result == PackageManager.PERMISSION_GRANTED &&
                 record_audio_result == PackageManager.PERMISSION_GRANTED;
     }
 
