@@ -13,6 +13,7 @@ import android.view.View;
 
 import com.example.grouphfinalproject.Fragments.AudioFragment;
 import com.example.grouphfinalproject.Fragments.NoteDetailsFragment;
+import com.example.grouphfinalproject.Fragments.NoteImagesFragment;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -75,6 +76,7 @@ public class Main2Activity extends AppCompatActivity {
                     }                    return true;
                 case R.id.navigation_images:
                     actionBar.setTitle("Images");
+                    loadFragment(new NoteImagesFragment(noteModelData));
                     return true;
                 case R.id.navigation_audio:
                     actionBar.setTitle("Audio");

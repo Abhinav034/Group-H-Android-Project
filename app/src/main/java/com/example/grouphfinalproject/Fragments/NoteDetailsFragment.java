@@ -94,6 +94,7 @@ public class NoteDetailsFragment extends Fragment {
 
                 if (location != null){
                     currentLocation = location;
+                    Log.i(TAG, "onLocationChanged: " + currentLocation.getLatitude());
                 }
             }
 
@@ -141,7 +142,7 @@ public class NoteDetailsFragment extends Fragment {
                 } else {
                     SimpleDateFormat currentTimeStamp = new SimpleDateFormat("dd-MM-yyyy hh-mm-ss");
 
-                    Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + cat);
+                    Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + currentLocation.getLatitude());
                     if(mDatabaseHelper.addNote(title, descp, cat,
                             currentTimeStamp.format(new Date()), currentLocation.getLatitude(), currentLocation.getLongitude()))
 
@@ -192,6 +193,7 @@ public class NoteDetailsFragment extends Fragment {
     private void startup(){
         requestLocationUpdate();
         currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Log.i(TAG, "startup: " + currentLocation.getLatitude());
 
     }
 
