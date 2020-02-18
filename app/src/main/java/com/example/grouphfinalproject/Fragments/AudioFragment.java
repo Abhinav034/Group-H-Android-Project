@@ -2,6 +2,8 @@ package com.example.grouphfinalproject.Fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -26,7 +28,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.grouphfinalproject.Adapters.AudioNoteAdapter;
+import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
@@ -40,7 +47,7 @@ public class AudioFragment extends Fragment {
     private MediaRecorder myRecorder;
     String path;
     private NoteModel noteModel;
-    ListView lvAudio;
+    SwipeMenuListView lvAudio;
 
     public static final String TAG = "Audio";
 
@@ -113,8 +120,6 @@ public class AudioFragment extends Fragment {
         }
 
 
-
-
         ivRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,6 +162,46 @@ public class AudioFragment extends Fragment {
 
             }
         });
+
+        SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+
+                SwipeMenuItem delete = new SwipeMenuItem(getContext());
+
+                delete.setIcon(R.drawable.ic_delete);
+                delete.setBackground(new ColorDrawable(Color.parseColor("#F21717")));
+                delete.setWidth(250);
+                menu.addMenuItem(delete);
+            }
+        };
+        lvAudio.setMenuCreator(swipeMenuCreator);
+
+
+        lvAudio.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+
+                if (index == 0){
+
+
+                    //DataBase delete code
+
+                    File file = new File(audioPaths.get(position));
+                    if(file.delete())
+                        Toast.makeText(getContext(), "Note audio deleted successfully!!", Toast.LENGTH_SHORT).show();
+
+                    getPaths();
+
+
+                }
+                return true;
+            }
+        });
+
+        lvAudio.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+
+
 
     }
 

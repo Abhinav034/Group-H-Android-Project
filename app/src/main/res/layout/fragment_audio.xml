@@ -43,11 +43,28 @@
 
         </LinearLayout>
 
-        <ListView
+<!--        <ListView-->
+<!--            android:id="@+id/lv_audio_notes"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_below="@id/ll_audio" />-->
+        <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@+id/lv_audio_notes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/ll_audio" />
+            android:layout_below="@id/ll_audio"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_no_notes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/ll_audio"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="No audio notes yet."
+            />
+
 
     </RelativeLayout>
 
