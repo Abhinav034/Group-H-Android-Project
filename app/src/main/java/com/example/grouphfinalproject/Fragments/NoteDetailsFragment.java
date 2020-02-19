@@ -58,6 +58,7 @@ public class NoteDetailsFragment extends Fragment {
     public NoteDetailsFragment(NoteModel noteModel) {
         this.noteModel = noteModel;
     }
+
     public NoteDetailsFragment(String category) {
         this.category = category;
     }
@@ -77,13 +78,13 @@ public class NoteDetailsFragment extends Fragment {
         etcategory = view.findViewById(R.id.et_note_category);
         btnsave = view.findViewById(R.id.btn_save_note);
 
-        if(noteModel != null){
+        if (noteModel != null) {
 
             noteExists = true;
             etTitle.setText(noteModel.getTitle());
             etcategory.setText(noteModel.getCategory());
             etDescription.setText(noteModel.getDescription());
-        } else if(category != null){
+        } else if (category != null) {
             etcategory.setText(category);
         }
 
@@ -92,7 +93,9 @@ public class NoteDetailsFragment extends Fragment {
             @Override
             public void onLocationChanged(Location location) {
 
-                if (location != null){
+                Log.i(TAG, "onLocationChanged: ");
+                Log.i(TAG, "onLocationChanged: " + location);
+                if (location != null) {
                     currentLocation = location;
                     Log.i(TAG, "onLocationChanged: " + currentLocation.getLatitude());
                 }
@@ -114,14 +117,12 @@ public class NoteDetailsFragment extends Fragment {
             }
         };
 
-        if(!checkPermission()){
+        if (!checkPermission()) {
             requestPermission();
-        }else {
+        } else {
 
             startup();
         }
-
-
 
 
         btnsave.setOnClickListener(new View.OnClickListener() {
@@ -131,9 +132,9 @@ public class NoteDetailsFragment extends Fragment {
                 String descp = etDescription.getText().toString().trim();
                 String cat = etcategory.getText().toString().trim();
 
-                if(noteExists){
+                if (noteExists) {
                     Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + cat);
-                    if(mDatabaseHelper.updateNote(noteModel.getId(), title, descp, cat))
+                    if (mDatabaseHelper.updateNote(noteModel.getId(), title, descp, cat))
                         Toast.makeText(getContext(), "Note updated successfully!!", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getContext(), "Error in updating note.", Toast.LENGTH_SHORT).show();
@@ -143,7 +144,7 @@ public class NoteDetailsFragment extends Fragment {
                     SimpleDateFormat currentTimeStamp = new SimpleDateFormat("dd-MM-yyyy hh-mm-ss");
 
                     Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + currentLocation.getLatitude());
-                    if(mDatabaseHelper.addNote(title, descp, cat,
+                    if (mDatabaseHelper.addNote(title, descp, cat,
                             currentTimeStamp.format(new Date()), currentLocation.getLatitude(), currentLocation.getLongitude()))
 
                         Toast.makeText(getContext(), "Notes saved!", Toast.LENGTH_SHORT).show();
@@ -154,8 +155,7 @@ public class NoteDetailsFragment extends Fragment {
                 }
 
 
-
-                if (!catList.contains(cat)){
+                if (!catList.contains(cat)) {
                     catList.add(cat);
                     try {
                         sharedPreferences.edit().putString(CATEGORY_LIST, ObjectSerializer.serialize(catList)).apply();
@@ -174,7 +174,7 @@ public class NoteDetailsFragment extends Fragment {
 
         Cursor cursor = mDatabaseHelper.getAllNotes(categoryName);
 
-        if(cursor.moveToLast()){
+        if (cursor.moveToLast()) {
 
             // here we are updating noteModelData variable
             noteModel = new NoteModel(
@@ -190,9 +190,10 @@ public class NoteDetailsFragment extends Fragment {
     }
 
     @SuppressLint("MissingPermission")
-    private void startup(){
+    private void startup() {
         requestLocationUpdate();
         currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Log.i(TAG, "startup: ");
         Log.i(TAG, "startup: " + currentLocation.getLatitude());
 
     }
@@ -203,25 +204,40 @@ public class NoteDetailsFragment extends Fragment {
     }
 
     private void requestPermission() {
-       requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+//        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
     }
 
     @SuppressLint("MissingPermission")
     private void requestLocationUpdate() {
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, locationListener);
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 100, locationListener);
     }
 
-    @SuppressLint("MissingPermission")
+    public void setData(){
+        startup();
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        System.out.println("Called");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.i(TAG, "onRequestPermissionsResult: ");
         if (requestCode == REQUEST_CODE) {
+            Log.i(TAG, "onRequestPermissionsResult: " + REQUEST_CODE);
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "onRequestPermissionsResult: IF ");
                 startup();
 
             }else{
+                Log.i(TAG, "onRequestPermissionsResult: ELSE");
                 Toast.makeText(getContext(), "Requires permission to access location.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+
+
+
+
 }

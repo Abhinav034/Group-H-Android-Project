@@ -8,6 +8,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,8 @@ public class AudioFragment extends Fragment {
     public static final String TAG = "Audio";
 
     ArrayList<String> audioPaths = new ArrayList<>();
+
+    long offset = 0;
 
     public AudioFragment(NoteModel noteModel) {
         this.noteModel = noteModel;
@@ -135,6 +138,7 @@ public class AudioFragment extends Fragment {
                         e.printStackTrace();
                     }
 
+                    chronometer.setBase(SystemClock.elapsedRealtime() - offset);
                     chronometer.start();
 
                     ivRecord.setVisibility(View.GONE);
@@ -156,7 +160,13 @@ public class AudioFragment extends Fragment {
 
                 getPaths();
 
+//                chronometer.setBase(SystemClock.elapsedRealtime());
                 chronometer.stop();
+                offset = SystemClock.elapsedRealtime() - chronometer.getBase();
+
+                chronometer.setBase(SystemClock.elapsedRealtime());
+                offset = 0;
+
                 ivRecord.setVisibility(View.VISIBLE);
                 ivStop.setVisibility(View.GONE);
 
