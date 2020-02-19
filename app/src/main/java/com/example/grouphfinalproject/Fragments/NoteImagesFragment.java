@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -66,6 +68,10 @@ public class NoteImagesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ImageButton btnAddImage = view.findViewById(R.id.btn_add_image);
         gridView = view.findViewById(R.id.gridview_images);
+        final RelativeLayout rlZoomImage = view.findViewById(R.id.rl_zoom_image);
+        final RelativeLayout rlList = view.findViewById(R.id.rl_list);
+        final ImageView ivZoom = view.findViewById(R.id.iv_full_image);
+
 
         if(!checkCameraPermission()){
             requestCameraPermission();
@@ -86,9 +92,24 @@ public class NoteImagesFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(getContext(), "Image selected " + position, Toast.LENGTH_SHORT).show();
+                    rlList.setClickable(false);
+                    rlZoomImage.setVisibility(View.VISIBLE);
+
+                    File imgFile = new File(imagesPath.get(position));
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    ivZoom.setImageBitmap(myBitmap);
+
                 }
             });
         }
+
+        view.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rlZoomImage.setVisibility(View.GONE);
+                rlList.setClickable(true);
+            }
+        });
 
 
         btnAddImage.setOnClickListener(new View.OnClickListener() {
