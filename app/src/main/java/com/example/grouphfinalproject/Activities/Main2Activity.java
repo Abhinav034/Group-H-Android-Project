@@ -28,6 +28,7 @@ public class Main2Activity extends AppCompatActivity {
 
     Intent intent;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
