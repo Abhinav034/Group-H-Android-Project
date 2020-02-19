@@ -44,10 +44,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
-    ImageButton imageButton;
 
-    Double olat , olng;
-    Double dlat , dlng;
+
+    private Double olat , olng;
+    private Double dlat , dlng;
 
 
     private ArrayList<Marker> markers = new ArrayList<>();
@@ -78,7 +78,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_map , container , false );
-        imageButton = view.findViewById(R.id.directionButton);
+       ImageButton imageButton = view.findViewById(R.id.directionButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
