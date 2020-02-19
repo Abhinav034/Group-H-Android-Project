@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.grouphfinalproject.GetRouteData;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -39,13 +41,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private NoteModel noteModel;
     private GoogleMap mMap;
-    FusedLocationProviderClient fusedLocationProviderClient;
-    LocationRequest locationRequest;
-    LocationCallback locationCallback;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
+    ImageButton imageButton;
 
-    Marker homeMarker;
+    Double olat , olng;
+    Double dlat , dlng;
 
-    ArrayList<Marker> markers = new ArrayList<>();
+
+    private ArrayList<Marker> markers = new ArrayList<>();
 
     public MapFragment(NoteModel noteModel){
 
@@ -73,6 +78,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_map , container , false );
+        imageButton = view.findViewById(R.id.directionButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = getDirectionsUrl();
+                Object [] dataTransfer = new Object[4];
+
+                dataTransfer[0] = mMap;
+                dataTransfer[1] = url;
+                dataTransfer[2] = new LatLng(dlat , dlng);
+                dataTransfer[3] = new LatLng(olat , olng);
+
+                GetRouteData getRouteData = new GetRouteData();
+                getRouteData.execute(dataTransfer);
+            }
+        });
         return view;
     }
 
@@ -105,6 +126,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
               for(Location location : locationResult.getLocations()){
 
                   setHomeMarker(location);
+                  olat = location.getLatitude();
+                  olng = location.getLongitude();
 
               }
           }
@@ -115,7 +138,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setHomeMarker(Location location){
-
+        Marker homeMarker;
         LatLng userlocation = new LatLng(location.getLatitude() , location.getLongitude());
 
         MarkerOptions options = new MarkerOptions()
@@ -163,7 +186,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         }
 
-        LatLng latLng = new LatLng(noteModel.getLatitude() , noteModel.getLongitude());
+        dlat = noteModel.getLatitude();
+        dlng = noteModel.getLongitude();
+
+        LatLng latLng = new LatLng(dlat , dlng);
         MarkerOptions options = new MarkerOptions()
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
@@ -171,6 +197,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         mMap.addMarker(options);
 
+    }
+
+    private String getDirectionsUrl(){
+        StringBuilder stringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
+        stringBuilder.append("origin=" + olat + "," + olng);
+        stringBuilder.append("&destination=" + dlat + "," + dlng);
+        stringBuilder.append("&key=" + getString(R.string.api_key_directions));
+
+        System.out.println(stringBuilder);
+        return stringBuilder.toString();
     }
 
 

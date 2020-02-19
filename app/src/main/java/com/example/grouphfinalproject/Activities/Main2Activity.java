@@ -99,7 +99,7 @@ public class Main2Activity extends AppCompatActivity {
                     if(noteModelData != null){
                         loadFragment(new MapFragment(noteModelData));
                     } else {
-                        loadFragment(new MapFragment(null));
+                        
                     }
                     return true;
             }
