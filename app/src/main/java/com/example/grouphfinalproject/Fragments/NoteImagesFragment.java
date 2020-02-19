@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.grouphfinalproject.Adapters.NoteImageAdapter;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
@@ -33,6 +36,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class NoteImagesFragment extends Fragment {
 
@@ -44,6 +48,9 @@ public class NoteImagesFragment extends Fragment {
     NoteModel noteModel;
     ImageView ivCapturedImage;
     private File directory;
+
+    GridView gridView;
+    ArrayList<String> imagesPath;
 
     public NoteImagesFragment(NoteModel noteModel) {
         this.noteModel = noteModel;
@@ -58,6 +65,7 @@ public class NoteImagesFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         ImageButton btnAddImage = view.findViewById(R.id.btn_add_image);
+        gridView = view.findViewById(R.id.gridview_images);
 
         if(!checkCameraPermission()){
             requestCameraPermission();
@@ -68,7 +76,20 @@ public class NoteImagesFragment extends Fragment {
             directory = new File(sdCard.getAbsolutePath() + "/NotesImages/" + noteModel.getId());
             if(!directory.exists())
                 directory.mkdirs();
+            else
+                showImagesInGridView();
+
+            NoteImageAdapter imageAdapter = new NoteImageAdapter(getContext(), imagesPath);
+            gridView.setAdapter(imageAdapter);
+
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getContext(), "Image selected " + position, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+
 
         btnAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +165,7 @@ public class NoteImagesFragment extends Fragment {
     }
 
     private void requestCameraPermission(){
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA,
+        requestPermissions(new String[]{Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, IMAGE_REQUEST_CODE);
 
@@ -152,6 +173,7 @@ public class NoteImagesFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         if (requestCode == IMAGE_REQUEST_CODE) {
 
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
@@ -263,5 +285,27 @@ public class NoteImagesFragment extends Fragment {
             e.printStackTrace();
         }
 
+    }
+
+    private void showImagesInGridView(){
+
+        imagesPath = new ArrayList<>();
+        File files[] = directory.listFiles();
+        if(files != null){
+            if (files.length != 0) {
+                for (int i = 0; i < files.length; i++) {
+                    //here populate your list
+                    imagesPath.add(files[i].toString());
+                    Log.i(TAG, "onViewCreated: getpaths " + files[i]);
+                }
+            } else {
+                //no file available
+                Log.i(TAG, "onViewCreated: getpaths " + "no files");
+
+            }
+
+        } else{
+            Log.i(TAG, "showImagesInGridView: null directory");
+        }
     }
 }
