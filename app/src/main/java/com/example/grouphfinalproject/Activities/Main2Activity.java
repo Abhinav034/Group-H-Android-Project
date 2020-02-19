@@ -7,14 +7,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.grouphfinalproject.Fragments.AudioFragment;
+import com.example.grouphfinalproject.Fragments.MapFragment;
 import com.example.grouphfinalproject.Fragments.NoteDetailsFragment;
 import com.example.grouphfinalproject.Fragments.NoteImagesFragment;
 import com.example.grouphfinalproject.Models.NoteModel;
@@ -99,6 +96,11 @@ public class Main2Activity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_maps:
                     actionBar.setTitle("Map");
+                    if(noteModelData != null){
+                        loadFragment(new MapFragment(noteModelData));
+                    } else {
+                        loadFragment(new MapFragment(null));
+                    }
                     return true;
             }
             return false;
