@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.example.grouphfinalproject.Activities.Main2Activity;
 import com.example.grouphfinalproject.GetRouteData;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
@@ -39,7 +40,6 @@ import java.util.ArrayList;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    private NoteModel noteModel;
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationRequest locationRequest;
@@ -49,21 +49,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Double olat , olng;
     private Double dlat , dlng;
 
+    private LatLng currentLocation, destination;
 
     private ArrayList<Marker> markers = new ArrayList<>();
-
-    public MapFragment(NoteModel noteModel){
-
-        this.noteModel = noteModel;
-
-    }
 
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
 
                 fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
             }
@@ -78,7 +72,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_map , container , false );
-       ImageButton imageButton = view.findViewById(R.id.directionButton);
+        ImageButton imageButton = view.findViewById(R.id.directionButton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,20 +94,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         locationRequest = new LocationRequest();
-        locationRequest = new LocationRequest();
-         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(3000);
         locationRequest.setSmallestDisplacement(20);
         locationRequest.setFastestInterval(2000);
 
         getLocation();
-
 
 
     }
@@ -125,9 +118,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
           public void onLocationResult(LocationResult locationResult) {
               for(Location location : locationResult.getLocations()){
 
-                  setHomeMarker(location);
-                  olat = location.getLatitude();
-                  olng = location.getLongitude();
+//                  setHomeMarker(location);
+//                  olat = location.getLatitude();
+//                  olng = location.getLongitude();
+
+                  mMap.setMyLocationEnabled(true);
+
+                  currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+
+                  CameraPosition cameraPosition = CameraPosition.builder()
+                          .target(currentLocation)
+                          .bearing(0)
+                          .tilt(45)
+                          .zoom(15)
+                          .build();
+                  mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
               }
           }
@@ -153,7 +159,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             for (Marker marker:markers){
                 marker.remove();
             }markers.clear();
-
         }
         homeMarker = mMap.addMarker(options);
         markers.add(homeMarker);
@@ -176,33 +181,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//
+//            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+//
+//
+//        } else {
+//            requestPermissions( new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+//
+//        }
 
-            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+        if(Main2Activity.noteModelData != null) {
+            destination = new LatLng(Main2Activity.noteModelData.getLatitude(), Main2Activity.noteModelData.getLongitude());
+//            dlat = Main2Activity.noteModelData.getLatitude();
+//            dlng = Main2Activity.noteModelData.getLongitude();
+
+//            LatLng latLng = new LatLng(dlat, dlng);
+            MarkerOptions options = new MarkerOptions()
+                    .position(destination)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
 
-        } else {
-            requestPermissions( new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
+            mMap.addMarker(options);
         }
-
-        dlat = noteModel.getLatitude();
-        dlng = noteModel.getLongitude();
-
-        LatLng latLng = new LatLng(dlat , dlng);
-        MarkerOptions options = new MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-
-
-        mMap.addMarker(options);
 
     }
 
     private String getDirectionsUrl(){
         StringBuilder stringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/directions/json?");
-        stringBuilder.append("origin=" + olat + "," + olng);
-        stringBuilder.append("&destination=" + dlat + "," + dlng);
+        stringBuilder.append("origin=" + currentLocation.latitude + "," + currentLocation.longitude);
+        stringBuilder.append("&destination=" + destination.latitude + "," + destination.longitude);
         stringBuilder.append("&key=" + getString(R.string.api_key_directions));
 
         System.out.println(stringBuilder);

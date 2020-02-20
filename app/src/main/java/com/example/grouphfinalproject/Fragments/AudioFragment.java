@@ -33,6 +33,7 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.grouphfinalproject.Activities.Main2Activity;
 import com.example.grouphfinalproject.Adapters.AudioNoteAdapter;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.Models.NoteModel;
@@ -47,7 +48,7 @@ public class AudioFragment extends Fragment {
     private static final int AUDIO_REQUEST_CODE = 100;
     private MediaRecorder myRecorder;
     String path;
-    private NoteModel noteModel;
+//    private NoteModel noteModel;
     SwipeMenuListView lvAudio;
 
     public static final String TAG = "Audio";
@@ -56,9 +57,9 @@ public class AudioFragment extends Fragment {
 
     long offset = 0;
 
-    public AudioFragment(NoteModel noteModel) {
-        this.noteModel = noteModel;
-    }
+//    public AudioFragment(NoteModel noteModel) {
+//        this.noteModel = noteModel;
+//    }
 
     @Nullable
     @Override
@@ -81,13 +82,13 @@ public class AudioFragment extends Fragment {
             requestAudioPermission();
 
 
-        if(noteModel != null){
+        if(Main2Activity.noteModelData != null){
             Log.i(TAG, "onViewCreated: model not null");
 
 //            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + noteModel.getId() + "/_1" + ".3gp";
 
             File root = Environment.getExternalStorageDirectory();
-            File file = new File(root.getAbsolutePath() + "/" + noteModel.getId());
+            File file = new File(root.getAbsolutePath() + "/" + Main2Activity.noteModelData.getId());
             if (!file.exists()) {
                 file.mkdirs();
             } else{
@@ -218,10 +219,10 @@ public class AudioFragment extends Fragment {
     private void setPath(){
 
         File root = Environment.getExternalStorageDirectory();
-        File folder = new File(root.getAbsolutePath() + "/" + noteModel.getId());
+        File folder = new File(root.getAbsolutePath() + "/" + Main2Activity.noteModelData.getId());
         File files[] = folder.listFiles();
         if(files != null) {
-            path = folder.getPath() + "/" + noteModel.getId() + "_" + files.length + ".3gp";
+            path = folder.getPath() + "/" + Main2Activity.noteModelData.getId() + "_" + files.length + ".3gp";
 
             Log.i(TAG, "setPath: " + path);
             if (files.length != 0) {
@@ -242,7 +243,7 @@ public class AudioFragment extends Fragment {
     private void getPaths(){
         audioPaths.clear();
         File root = Environment.getExternalStorageDirectory();
-        File folder = new File(root.getAbsolutePath() + "/" + noteModel.getId());
+        File folder = new File(root.getAbsolutePath() + "/" + Main2Activity.noteModelData.getId());
         File files[] = folder.listFiles();
         if(files != null) {
             if (files.length != 0) {

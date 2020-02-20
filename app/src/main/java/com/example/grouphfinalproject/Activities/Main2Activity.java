@@ -23,11 +23,10 @@ import static com.example.grouphfinalproject.Activities.MainActivity.CATEGORY_KE
 public class Main2Activity extends AppCompatActivity {
 
     private ActionBar actionBar;
-    NoteModel noteModelData;
+    public static NoteModel noteModelData;
     String catName;
     Intent intent;
 
-    NoteDetailsFragment frag;
 
     public static final int REQUEST_CODE = 1;
     public static final String TAG = "Main2";
@@ -41,7 +40,6 @@ public class Main2Activity extends AppCompatActivity {
         noteModelData = (NoteModel) intent.getSerializableExtra(NotesActivity.SELECTED_NOTE);
 
         actionBar = getSupportActionBar();
-        frag =   new NoteDetailsFragment(noteModelData);
 
         BottomNavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(mItemSelectedListener);
@@ -51,16 +49,13 @@ public class Main2Activity extends AppCompatActivity {
 
 
         if (noteModelData != null) {
-            loadFragment(frag);
+            loadFragment(new NoteDetailsFragment(null));
 
         }else{
             catName = intent.getStringExtra(CATEGORY_KEY);
             loadFragment(new NoteDetailsFragment(catName));
 
         }
-
-
-
     }
 
 
@@ -74,7 +69,7 @@ public class Main2Activity extends AppCompatActivity {
                     actionBar.setTitle("Note");
                     if (noteModelData != null) {
 
-                        loadFragment(frag);
+                        loadFragment(new NoteDetailsFragment(null));
 
                     }else{
                         catName = intent.getStringExtra(CATEGORY_KEY);
@@ -84,23 +79,20 @@ public class Main2Activity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_images:
                     actionBar.setTitle("Images");
-                    loadFragment(new NoteImagesFragment(noteModelData));
+                    loadFragment(new NoteImagesFragment());
                     return true;
                 case R.id.navigation_audio:
                     actionBar.setTitle("Audio");
-                    if(noteModelData != null){
-                        loadFragment(new AudioFragment(noteModelData));
-                    } else {
-                        loadFragment(new AudioFragment(null));
-                    }
+//                    if(noteModelData != null){
+                        loadFragment(new AudioFragment());
+//                    } else {
+//                        loadFragment(new AudioFragment(null));
+//                    }
                     return true;
                 case R.id.navigation_maps:
                     actionBar.setTitle("Map");
-                    if(noteModelData != null){
-                        loadFragment(new MapFragment(noteModelData));
-                    } else {
-                        
-                    }
+                        loadFragment(new MapFragment());
+
                     return true;
             }
             return false;
@@ -119,19 +111,6 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-//        if (requestCode == REQUEST_CODE) {
-//            Log.i(TAG, "onRequestPermissionsResult: " + REQUEST_CODE);
-//
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Log.i(TAG, "onRequestPermissionsResult: IF ");
-//                frag.setData();
-//
-//            }else{
-//                Log.i(TAG, "onRequestPermissionsResult: ELSE");
-//                Toast.makeText(this, "Requires permission to access location.", Toast.LENGTH_SHORT).show();
-//            }
-//        }
 
     }
 }

@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.grouphfinalproject.Activities.Main2Activity;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.DatabaseHandlers.ObjectSerializer;
 import com.example.grouphfinalproject.Models.NoteModel;
@@ -51,7 +52,7 @@ public class NoteDetailsFragment extends Fragment {
     Button btnsave;
     boolean noteExists = false;
 
-    private NoteModel noteModel;
+//    private NoteModel noteModel;
     private String category;
     private DatabaseHelper mDatabaseHelper;
 
@@ -71,9 +72,9 @@ public class NoteDetailsFragment extends Fragment {
     LatLng currentLocation;
 
 
-    public NoteDetailsFragment(NoteModel noteModel) {
-        this.noteModel = noteModel;
-    }
+//    public NoteDetailsFragment(NoteModel noteModel) {
+//        this.noteModel = noteModel;
+//    }
 
     public NoteDetailsFragment(String category) {
         this.category = category;
@@ -94,12 +95,12 @@ public class NoteDetailsFragment extends Fragment {
         etcategory = view.findViewById(R.id.et_note_category);
         btnsave = view.findViewById(R.id.btn_save_note);
 
-        if (noteModel != null) {
+        if (Main2Activity.noteModelData != null) {
 
             noteExists = true;
-            etTitle.setText(noteModel.getTitle());
-            etcategory.setText(noteModel.getCategory());
-            etDescription.setText(noteModel.getDescription());
+            etTitle.setText(Main2Activity.noteModelData.getTitle());
+            etcategory.setText(Main2Activity.noteModelData.getCategory());
+            etDescription.setText(Main2Activity.noteModelData.getDescription());
         } else if (category != null) {
             etcategory.setText(category);
         }
@@ -153,7 +154,7 @@ public class NoteDetailsFragment extends Fragment {
 
                 if (noteExists) {
                     Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + cat);
-                    if (mDatabaseHelper.updateNote(noteModel.getId(), title, descp, cat))
+                    if (mDatabaseHelper.updateNote(Main2Activity.noteModelData.getId(), title, descp, cat))
                         Toast.makeText(getContext(), "Note updated successfully!!", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getContext(), "Error in updating note.", Toast.LENGTH_SHORT).show();
@@ -220,7 +221,7 @@ public class NoteDetailsFragment extends Fragment {
         if (cursor.moveToLast()) {
 
             // here we are updating noteModelData variable
-            noteModel = new NoteModel(
+            Main2Activity.noteModelData = new NoteModel(
                     cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2),

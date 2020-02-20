@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GroupHFinalProject</string>
+    <string name="app_name">Notes</string>
     <string name="title_activity_maps">Map</string>
     <string name="api_key_directions">AIzaSyBLkGYeln1D_xPMlZd2Gq0FydoTK8RqAX4</string>
     <string name="add_note_title">Enter note title...</string>

@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.grouphfinalproject.Activities.Main2Activity;
 import com.example.grouphfinalproject.Adapters.NoteImageAdapter;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
@@ -47,16 +49,12 @@ public class NoteImagesFragment extends Fragment {
     private final int GALLERY_REQUEST_CODE = 2;
     public static final String TAG = "Note ImagesFrag";
 
-    NoteModel noteModel;
     ImageView ivCapturedImage;
     private File directory;
 
     GridView gridView;
-    ArrayList<String> imagesPath;
+    ArrayList<String> imagesPath = new ArrayList<>();
 
-    public NoteImagesFragment(NoteModel noteModel) {
-        this.noteModel = noteModel;
-    }
 
     @Nullable
     @Override
@@ -70,16 +68,18 @@ public class NoteImagesFragment extends Fragment {
         gridView = view.findViewById(R.id.gridview_images);
         final RelativeLayout rlZoomImage = view.findViewById(R.id.rl_zoom_image);
         final RelativeLayout rlList = view.findViewById(R.id.rl_list);
+        RelativeLayout rlOuterLayer = view.findViewById(R.id.rl_note_images);
         final ImageView ivZoom = view.findViewById(R.id.iv_full_image);
+        TextView tvNoNotes = view.findViewById(R.id.txt_images);
 
 
         if(!checkCameraPermission()){
             requestCameraPermission();
         }
 
-        if(noteModel != null){
+        if(Main2Activity.noteModelData != null){
             File sdCard = Environment.getExternalStorageDirectory();
-            directory = new File(sdCard.getAbsolutePath() + "/NotesImages/" + noteModel.getId());
+            directory = new File(sdCard.getAbsolutePath() + "/NotesImages/" + Main2Activity.noteModelData.getId());
             if(!directory.exists())
                 directory.mkdirs();
             else
@@ -101,6 +101,9 @@ public class NoteImagesFragment extends Fragment {
 
                 }
             });
+        } else{
+            tvNoNotes.setVisibility(View.VISIBLE);
+            rlOuterLayer.setVisibility(View.GONE);
         }
 
         view.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
@@ -284,7 +287,7 @@ public class NoteImagesFragment extends Fragment {
 
             File files[] = directory.listFiles();
             if(files != null){
-                String fileName = String.format("image_%d_%d.png", noteModel.getId(), files.length);
+                String fileName = String.format("image_%d_%d.png", Main2Activity.noteModelData.getId(), files.length);
                 File outFile = new File(directory, fileName);
                 outFile.createNewFile();
                 Log.d(TAG, "onPictureTaken - wrote to " + outFile.getAbsolutePath());
@@ -310,7 +313,7 @@ public class NoteImagesFragment extends Fragment {
 
     private void showImagesInGridView(){
 
-        imagesPath = new ArrayList<>();
+        imagesPath.clear();
         File files[] = directory.listFiles();
         if(files != null){
             if (files.length != 0) {
