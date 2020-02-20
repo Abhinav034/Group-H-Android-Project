@@ -15,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -93,18 +95,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 
-                if (index == 0){
+                switch (index){
+
+                    case 0:
+
+                        boolean removed = databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
+                        if (removed){
+
+                            catList.remove(position);
+
+                            arrayAdapter.notifyDataSetChanged();
+
+                            Toast.makeText(MainActivity.this , "Deleted!!" , Toast.LENGTH_SHORT).show();
+                        }else{
 
 
-                    //DataBase delete code
+                            Toast.makeText(MainActivity.this , "Failed to delete!" , Toast.LENGTH_SHORT).show();
 
-                    databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
-                    catList.remove(position);
+                        }
 
-                    arrayAdapter.notifyDataSetChanged();
+                        break;
 
 
                 }
+
+
+
+
+
                 return true;
             }
         });
