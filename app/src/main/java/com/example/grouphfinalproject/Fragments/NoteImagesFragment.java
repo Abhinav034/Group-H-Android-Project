@@ -52,7 +52,7 @@ public class NoteImagesFragment extends Fragment {
     private File directory;
 
     GridView gridView;
-    ArrayList<String> imagesPath;
+    ArrayList<String> imagesPath = new ArrayList<>();
 
     public NoteImagesFragment(NoteModel noteModel) {
         this.noteModel = noteModel;
@@ -310,7 +310,7 @@ public class NoteImagesFragment extends Fragment {
 
     private void showImagesInGridView(){
 
-        imagesPath = new ArrayList<>();
+        imagesPath.clear();
         File files[] = directory.listFiles();
         if(files != null){
             if (files.length != 0) {

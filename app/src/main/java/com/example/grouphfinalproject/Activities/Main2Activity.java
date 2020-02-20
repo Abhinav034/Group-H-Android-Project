@@ -58,9 +58,6 @@ public class Main2Activity extends AppCompatActivity {
             loadFragment(new NoteDetailsFragment(catName));
 
         }
-
-
-
     }
 
 
