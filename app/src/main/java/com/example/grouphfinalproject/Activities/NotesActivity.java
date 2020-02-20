@@ -97,6 +97,8 @@ public class NotesActivity extends AppCompatActivity {
                         if (removed){
 
                             // add media file delete code here
+                            loadListData();
+
                             Toast.makeText(NotesActivity.this , "Note Deleted!!" , Toast.LENGTH_SHORT).show();
                         }else{
 
