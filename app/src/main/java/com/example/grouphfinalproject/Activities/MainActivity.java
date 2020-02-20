@@ -95,33 +95,24 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 
-                switch (index){
 
-                    case 0:
+                        databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
 
-                        boolean removed = databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
-                        if (removed){
 
+                            // add code to delete media file
                             catList.remove(position);
 
-                            arrayAdapter.notifyDataSetChanged();
 
-                            Toast.makeText(MainActivity.this , "Deleted!!" , Toast.LENGTH_SHORT).show();
-                        }else{
+                            try {
+                                sharedPreferences.edit().putString(CATEGORY_LIST, ObjectSerializer.serialize(catList)).apply();
 
-
-                            Toast.makeText(MainActivity.this , "Failed to delete!" , Toast.LENGTH_SHORT).show();
-
-                        }
-
-                        break;
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            reloadCategoryList();
 
 
-                }
-
-
-
-
+                            Toast.makeText(MainActivity.this , "Category Deleted!!" , Toast.LENGTH_SHORT).show();
 
                 return true;
             }
@@ -171,8 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
                 category = input.getText().toString();
                 catList.add(category);
-                System.out.println("first");
-                System.out.println(catList);
+
 
                 try {
                     sharedPreferences.edit().putString(CATEGORY_LIST, ObjectSerializer.serialize(catList)).apply();

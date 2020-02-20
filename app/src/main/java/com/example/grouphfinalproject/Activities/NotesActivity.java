@@ -4,13 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
@@ -21,7 +28,7 @@ public class NotesActivity extends AppCompatActivity {
 
     public static final String SELECTED_NOTE = "selectedNote" ;
     ImageButton btnAddNewNote;
-    ListView listView;
+    SwipeMenuListView listView;
     ArrayList<NoteModel> notesList;
     String categoryName;
 
@@ -61,6 +68,61 @@ public class NotesActivity extends AppCompatActivity {
 
             }
         });
+
+
+        SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+
+                SwipeMenuItem delete = new SwipeMenuItem(getApplicationContext());
+
+                delete.setIcon(R.drawable.ic_delete);
+                delete.setBackground(new ColorDrawable(Color.parseColor("#F21717")));
+                delete.setWidth(250);
+                menu.addMenuItem(delete);
+            }
+        };
+        listView.setMenuCreator(swipeMenuCreator);
+
+
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+
+                switch (index){
+
+                    case 0:
+
+                        boolean removed = databaseHelper.removeNote(DatabaseHelper.COLUMN_ID, String.valueOf(notesList.get(position).getId()));
+                        if (removed){
+
+                            // add media file delete code here
+                            loadListData();
+
+                            Toast.makeText(NotesActivity.this , "Note Deleted!!" , Toast.LENGTH_SHORT).show();
+                        }else{
+
+
+                            Toast.makeText(NotesActivity.this , "Failed to delete Note!" , Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        break;
+
+
+                }
+
+
+
+
+
+                return true;
+            }
+        });
+
+        listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+
+
 
 
     }
