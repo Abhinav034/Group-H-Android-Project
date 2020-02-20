@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,14 @@ import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.DatabaseHandlers.ObjectSerializer;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,9 +59,16 @@ public class NoteDetailsFragment extends Fragment {
     // location manager and listener
 
     public static final int REQUEST_CODE = 1;
-    LocationManager locationManager;
-    LocationListener locationListener;
-    Location currentLocation;
+
+//    LocationManager locationManager;
+//    LocationListener locationListener;
+
+
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private LocationRequest mLocationRequest;
+    private LocationCallback mLocationCallback;
+
+    LatLng currentLocation;
 
 
     public NoteDetailsFragment(NoteModel noteModel) {
@@ -88,6 +104,9 @@ public class NoteDetailsFragment extends Fragment {
             etcategory.setText(category);
         }
 
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+        getLocationRequest();
+        /*
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -116,12 +135,12 @@ public class NoteDetailsFragment extends Fragment {
 
             }
         };
+        */
 
         if (!checkPermission()) {
             requestPermission();
         } else {
-
-            startup();
+            mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         }
 
 
@@ -143,9 +162,9 @@ public class NoteDetailsFragment extends Fragment {
                 } else {
                     SimpleDateFormat currentTimeStamp = new SimpleDateFormat("dd-MM-yyyy hh-mm-ss");
 
-                    Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + currentLocation.getLatitude());
+                    Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + currentLocation.latitude);
                     if (mDatabaseHelper.addNote(title, descp, cat,
-                            currentTimeStamp.format(new Date()), currentLocation.getLatitude(), currentLocation.getLongitude()))
+                            currentTimeStamp.format(new Date()), currentLocation.latitude, currentLocation.longitude))
 
                         Toast.makeText(getContext(), "Notes saved!", Toast.LENGTH_SHORT).show();
                     else
@@ -170,6 +189,30 @@ public class NoteDetailsFragment extends Fragment {
         });
     }
 
+    private void getLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(5000);
+        mLocationRequest.setFastestInterval(3000);
+        mLocationRequest.setSmallestDisplacement(10);
+        setCurrentLocation();
+    }
+    private void setCurrentLocation() {
+
+        mLocationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                for (Location location : locationResult.getLocations()) {
+                    Log.i(TAG, "onLocationResult: " + location.getLatitude());
+                    currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+
+                }
+                Log.i(TAG, "onLocationResult: " + currentLocation.latitude);
+            }
+        };
+    }
+
     private void updateNoteDataVar(String categoryName) {
 
         Cursor cursor = mDatabaseHelper.getAllNotes(categoryName);
@@ -191,10 +234,11 @@ public class NoteDetailsFragment extends Fragment {
 
     @SuppressLint("MissingPermission")
     private void startup() {
-        requestLocationUpdate();
-        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//        requestLocationUpdate();
+
+//        currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Log.i(TAG, "startup: ");
-        Log.i(TAG, "startup: " + currentLocation.getLatitude());
+        Log.i(TAG, "startup: " + currentLocation.latitude);
 
     }
 
@@ -211,12 +255,12 @@ public class NoteDetailsFragment extends Fragment {
     @SuppressLint("MissingPermission")
     private void requestLocationUpdate() {
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 100, locationListener);
+//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 100, locationListener);
     }
 
-    public void setData(){
-        startup();
-    }
+//    public void setData(){
+//        startup();
+//    }
 
 
     @Override
@@ -227,7 +271,9 @@ public class NoteDetailsFragment extends Fragment {
             Log.i(TAG, "onRequestPermissionsResult: " + REQUEST_CODE);
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.i(TAG, "onRequestPermissionsResult: IF ");
-                startup();
+//                startup();
+                mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+
 
             }else{
                 Log.i(TAG, "onRequestPermissionsResult: ELSE");
