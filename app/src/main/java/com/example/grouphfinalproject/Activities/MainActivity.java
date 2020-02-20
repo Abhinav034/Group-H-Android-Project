@@ -95,12 +95,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 
-                switch (index){
 
-                    case 0:
+                        databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
 
-                        boolean removed = databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
-                        if (removed){
 
                             // add code to delete media file
                             catList.remove(position);
@@ -116,21 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                             Toast.makeText(MainActivity.this , "Category Deleted!!" , Toast.LENGTH_SHORT).show();
-                        }else{
-
-
-                            Toast.makeText(MainActivity.this , "Failed to delete Category!" , Toast.LENGTH_SHORT).show();
-
-                        }
-
-                        break;
-
-
-                }
-
-
-
-
 
                 return true;
             }
