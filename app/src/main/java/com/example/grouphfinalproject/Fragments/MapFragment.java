@@ -1,8 +1,14 @@
 package com.example.grouphfinalproject.Fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -17,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.grouphfinalproject.Activities.Main2Activity;
+import com.example.grouphfinalproject.Activities.MapsActivity;
+import com.example.grouphfinalproject.Activities.NotesActivity;
 import com.example.grouphfinalproject.GetRouteData;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
@@ -74,7 +82,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(destination != null){
+
+                if (!isOnline()){
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                    alert.setIcon(R.drawable.ic_warning);
+                    alert.setTitle("Network Problem");
+                    alert.setMessage("Please make sure you are connected to internet");
+
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+
+
+                        }
+
+                    });
+                    AlertDialog alertDialog = alert.create();
+                    alertDialog.show();
+
+
+
+                }
+
+
+                else if(destination != null){
                     String url = getDirectionsUrl();
                     Object [] dataTransfer = new Object[4];
 
@@ -143,6 +176,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     }
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+
 
     private void setHomeMarker(Location location){
         Marker homeMarker;
