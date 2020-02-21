@@ -161,7 +161,7 @@ public class NoteDetailsFragment extends Fragment {
 
                     updateNoteDataVar(cat);
                 } else {
-                    SimpleDateFormat currentTimeStamp = new SimpleDateFormat("dd-MM-yyyy hh-mm-ss");
+                    SimpleDateFormat currentTimeStamp = new SimpleDateFormat();
 
                     Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + currentLocation.latitude);
                     if (mDatabaseHelper.addNote(title, descp, cat,

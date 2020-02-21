@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -49,6 +50,7 @@ public class NoteListAdapter extends ArrayAdapter {
         TextView titleTxt = view.findViewById(R.id.titleText);
         TextView addressTxt = view.findViewById(R.id.addressText);
         TextView dateTxt = view.findViewById(R.id.dateText);
+        ImageView imageView = view.findViewById(R.id.imageView2);
 
         NoteModel currentNoteData = noteModel.get(position);
 
