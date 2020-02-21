@@ -3,6 +3,7 @@ package com.example.grouphfinalproject.Activities;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -15,7 +16,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -35,14 +38,17 @@ public class NotesActivity extends AppCompatActivity {
     public static final String SELECTED_NOTE = "selectedNote" ;
     ImageButton btnAddNewNote;
     SwipeMenuListView listView;
-    ArrayList<NoteModel> notesList;
+    ArrayList<NoteModel> notesList, SearchList;
     String categoryName;
     ActionBar actionbar;
+    Boolean isSearching = false;
+
 
     //private ArrayAdapter arrayAdapter;
     NoteListAdapter adapter;
     DatabaseHelper databaseHelper;
     public static final String TAG = "Notes List";
+    SearchView srch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +146,47 @@ public class NotesActivity extends AppCompatActivity {
         listView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
 
 
+        srch = findViewById(R.id.searchBar);
+
+
+        srch.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+
+
+                SearchList = new ArrayList<>();
+                if (!newText.isEmpty()){
+
+
+                    for (NoteModel n:notesList
+                    ) {
+
+                        if (n.getTitle().contains(newText)){
+                            SearchList.add(n);
+                        }
+
+                    }
+
+                    adapter = new NoteListAdapter(NotesActivity.this , R.layout.notes_list_layout ,SearchList, databaseHelper );
+                    listView.setAdapter(adapter);
+                    isSearching = true;
+                }else{
+
+                    isSearching = false;
+                    loadListData();
+
+
+                }
+                return false;
+            }
+        });
+
 
 
     }
@@ -148,6 +195,7 @@ public class NotesActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        isSearching = false;
         loadListData();
 
 
@@ -182,7 +230,7 @@ public class NotesActivity extends AppCompatActivity {
             cursor.close();
         }
         
-        adapter = new NoteListAdapter(this , R.layout.notes_list_layout ,notesList, databaseHelper );
+        adapter = new NoteListAdapter(this , R.layout.notes_list_layout , isSearching ? SearchList :notesList, databaseHelper );
         listView.setAdapter(adapter);
 
     }

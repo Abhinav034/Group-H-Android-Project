@@ -21,14 +21,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.grouphfinalproject.Adapters.CategoryAdaptor;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.DatabaseHandlers.ObjectSerializer;
+import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
 import java.io.File;
@@ -44,11 +47,15 @@ public class MainActivity extends AppCompatActivity {
     ImageButton btnAddCategory;
     String category;
 
+
+    SearchView srch;
     DatabaseHelper databaseHelper;
     public static SharedPreferences sharedPreferences;
 
     public static  ArrayList<String> catList = new ArrayList<>();
-    ArrayAdapter arrayAdapter;
+    ArrayList<String> SearchList;
+    Boolean isSearching = false;
+    CategoryAdaptor arrayAdapter;
 
 
     @Override
@@ -63,6 +70,50 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Categories");
         actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1792F2")));
+
+        srch = findViewById(R.id.searchBar);
+
+        srch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                System.out.println("this is called");
+
+
+                SearchList = new ArrayList<>();
+                if (!newText.isEmpty()){
+
+
+                    for (String c:catList
+                    ) {
+
+                        if (c.contains(newText.toUpperCase())){
+                            SearchList.add(c);
+                        }
+
+                    }
+
+                    arrayAdapter = new CategoryAdaptor(MainActivity.this , R.layout.cat_list_layout , SearchList, databaseHelper);
+                    listView.setAdapter(arrayAdapter);
+                    isSearching = true;
+                }else{
+
+                    isSearching = false;
+                    reloadCategoryList();
+
+
+
+                }
+                return false;
+            }
+        });
+
+
 
 
 
@@ -116,8 +167,9 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 
 
+                String categoryToDelete = isSearching ? SearchList.get(position) : catList.get(position);
 
-                Cursor cursor = databaseHelper.getAllNotes(catList.get(position));
+                Cursor cursor = databaseHelper.getAllNotes(categoryToDelete);
 
 
                 if (cursor.moveToFirst()) {
@@ -136,11 +188,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                        databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
+                        databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, categoryToDelete);
 
 
                             // add code to delete media file
-                            catList.remove(position);
+                            catList.remove(categoryToDelete);
+                            SearchList.remove(categoryToDelete);
 
 
 
@@ -170,26 +223,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        System.out.println(catList);
+       isSearching = false;
         reloadCategoryList();
     }
 
     private void reloadCategoryList() {
         catList.clear();
-        System.out.println(catList);
+
         try {
             catList = (ArrayList) ObjectSerializer.deserialize(sharedPreferences.getString(CATEGORY_LIST, ObjectSerializer.serialize(new ArrayList<>())));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(catList);
-        arrayAdapter = new ArrayAdapter(this , android.R.layout.simple_list_item_1 , catList);
+
+        arrayAdapter = new CategoryAdaptor(MainActivity.this , R.layout.cat_list_layout , isSearching ? SearchList : catList, databaseHelper);
         listView.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
     }
 
     private void addCategoryAlert(){
 
+        isSearching = false;
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this );
         alertDialog.setTitle("Add a category");
         alertDialog.setMessage("Enter a category");
