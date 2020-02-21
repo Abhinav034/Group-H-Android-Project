@@ -3,8 +3,15 @@
     <string name="title_activity_maps">Map</string>
     <string name="api_key_directions">AIzaSyBLkGYeln1D_xPMlZd2Gq0FydoTK8RqAX4</string>
     <string name="add_note_title">Enter note title...</string>
+    <string-array name="sortByOptions">
+        <item>Sort Notes By:</item>
+        <item>Title</item>
+        <item>Date Created</item>
+    </string-array>
 
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

@@ -74,6 +74,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.rawQuery("SELECT * from " + TABLE_NAME + " WHERE " + COLUMN_CATEGORY + "=?", new String[]{category});
     }
 
+    public Cursor getSortedNotes(String sortByCol, String category){
+
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        return sqLiteDatabase.rawQuery("SELECT * from " + TABLE_NAME + " WHERE "+
+                COLUMN_CATEGORY+ "=?" +" ORDER BY " + sortByCol, new String[]{category});
+    }
+
 
     public boolean updateNote(int id, String title, String description, String category){
 

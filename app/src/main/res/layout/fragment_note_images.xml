@@ -61,7 +61,7 @@
 
             <Button
                 android:id="@+id/btn_remove_image"
-                android:background="#f00"
+                android:background="#88FF0000"
                 android:textColor="#fff"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:layout_width="match_parent"

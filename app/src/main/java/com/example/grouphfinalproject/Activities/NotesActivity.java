@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -42,6 +43,7 @@ public class NotesActivity extends AppCompatActivity {
     String categoryName;
     ActionBar actionbar;
     Boolean isSearching = false;
+    Spinner sort;
 
 
     //private ArrayAdapter arrayAdapter;
@@ -63,6 +65,38 @@ public class NotesActivity extends AppCompatActivity {
         listView = findViewById(R.id.notesList);
         notesList = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
+        sort = findViewById(R.id.sort_spinner);
+        sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position > 0){
+
+                    switch (position){
+
+                        case 1:
+                            //sort by title
+                            sortData(DatabaseHelper.COLUMN_TITLE);
+                            break;
+                        case 2:
+                            // sort by date
+                            sortData(DatabaseHelper.COLUMN_TIMESTAMP);
+
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
 
 
@@ -230,6 +264,41 @@ public class NotesActivity extends AppCompatActivity {
             cursor.close();
         }
         
+        adapter = new NoteListAdapter(this , R.layout.notes_list_layout , isSearching ? SearchList :notesList, databaseHelper );
+        listView.setAdapter(adapter);
+
+    }
+
+
+    public void sortData(String colToSort){
+
+
+        notesList.clear();
+        Intent intent = getIntent();
+        categoryName = intent.getStringExtra(MainActivity.CATEGORY_KEY);
+
+
+        actionbar.setTitle(categoryName + " : Notes");
+
+        Cursor cursor = databaseHelper.getSortedNotes(colToSort, categoryName);
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                notesList.add(new NoteModel(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getDouble(5),
+                        cursor.getDouble(6)
+
+                ));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
         adapter = new NoteListAdapter(this , R.layout.notes_list_layout , isSearching ? SearchList :notesList, databaseHelper );
         listView.setAdapter(adapter);
 
