@@ -4,6 +4,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -31,6 +34,8 @@ import com.example.grouphfinalproject.R;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.example.grouphfinalproject.R.color.theme_color;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String CATEGORY_KEY = "Selected Category";
@@ -45,13 +50,19 @@ public class MainActivity extends AppCompatActivity {
     public static  ArrayList<String> catList = new ArrayList<>();
     ArrayAdapter arrayAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_RIGHT_ICON);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+
 
         ActionBar actionbar = getSupportActionBar();
         actionbar.setTitle("Categories");
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1792F2")));
 
 
 

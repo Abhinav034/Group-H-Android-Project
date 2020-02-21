@@ -1,5 +1,7 @@
 package com.example.grouphfinalproject.Activities;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,8 +9,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.example.grouphfinalproject.Fragments.AudioFragment;
 import com.example.grouphfinalproject.Fragments.MapFragment;
@@ -34,15 +41,21 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_RIGHT_ICON);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_note_details);
+        actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1792F2")));
 
         intent = getIntent();
         noteModelData = (NoteModel) intent.getSerializableExtra(NotesActivity.SELECTED_NOTE);
 
-        actionBar = getSupportActionBar();
+
 
         BottomNavigationView navigationView = findViewById(R.id.navigation);
         navigationView.setOnNavigationItemSelectedListener(mItemSelectedListener);
+        navigationView.setItemBackground(new ColorDrawable(Color.parseColor("#1792F2")));
 
         actionBar.setTitle("Note Details");
 

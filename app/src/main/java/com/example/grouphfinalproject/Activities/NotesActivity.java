@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -34,6 +37,7 @@ public class NotesActivity extends AppCompatActivity {
     SwipeMenuListView listView;
     ArrayList<NoteModel> notesList;
     String categoryName;
+    ActionBar actionbar;
 
     //private ArrayAdapter arrayAdapter;
     NoteListAdapter adapter;
@@ -43,10 +47,12 @@ public class NotesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_RIGHT_ICON);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_notes);
-
-
-
+        actionbar = getSupportActionBar();
+        actionbar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1792F2")));
         btnAddNewNote = findViewById(R.id.btn_add_notes);
         listView = findViewById(R.id.notesList);
         notesList = new ArrayList<>();
@@ -154,7 +160,7 @@ public class NotesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         categoryName = intent.getStringExtra(MainActivity.CATEGORY_KEY);
 
-        ActionBar actionbar = getSupportActionBar();
+
         actionbar.setTitle(categoryName + " : Notes");
 
         Cursor cursor = databaseHelper.getAllNotes(categoryName);
