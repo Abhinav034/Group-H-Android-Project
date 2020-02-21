@@ -46,8 +46,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private LocationCallback locationCallback;
 
 
-    private Double olat , olng;
-    private Double dlat , dlng;
 
     private LatLng currentLocation, destination;
 
@@ -81,8 +79,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 dataTransfer[0] = mMap;
                 dataTransfer[1] = url;
-                dataTransfer[2] = new LatLng(dlat , dlng);
-                dataTransfer[3] = new LatLng(olat , olng);
+                dataTransfer[2] = new LatLng(destination.latitude , destination.longitude);
+                dataTransfer[3] = new LatLng(currentLocation.latitude , currentLocation.longitude);
 
                 GetRouteData getRouteData = new GetRouteData();
                 getRouteData.execute(dataTransfer);
@@ -118,9 +116,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
           public void onLocationResult(LocationResult locationResult) {
               for(Location location : locationResult.getLocations()){
 
-//                 setHomeMarker(location);
-                  olat = location.getLatitude();
-                  olng = location.getLongitude();
+                  setHomeMarker(location);
+                  location.getLatitude();
+                  location.getLongitude();
 
                   mMap.setMyLocationEnabled(true);
 
@@ -193,8 +191,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         if(Main2Activity.noteModelData != null) {
             destination = new LatLng(Main2Activity.noteModelData.getLatitude(), Main2Activity.noteModelData.getLongitude());
-             dlat = Main2Activity.noteModelData.getLatitude();
-            dlng = Main2Activity.noteModelData.getLongitude();
+              Main2Activity.noteModelData.getLatitude();
+                Main2Activity.noteModelData.getLongitude();
 
 //            LatLng latLng = new LatLng(dlat, dlng);
             MarkerOptions options = new MarkerOptions()

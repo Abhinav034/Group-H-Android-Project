@@ -1,5 +1,6 @@
 package com.example.grouphfinalproject.Activities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -44,6 +45,8 @@ public class NotesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
 
+
+
         btnAddNewNote = findViewById(R.id.btn_add_notes);
         listView = findViewById(R.id.notesList);
         notesList = new ArrayList<>();
@@ -62,6 +65,7 @@ public class NotesActivity extends AppCompatActivity {
 //                startActivity(intent);
             }
         });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -149,6 +153,9 @@ public class NotesActivity extends AppCompatActivity {
         notesList.clear();
         Intent intent = getIntent();
         categoryName = intent.getStringExtra(MainActivity.CATEGORY_KEY);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle(categoryName + " : Notes");
 
         Cursor cursor = databaseHelper.getAllNotes(categoryName);
 

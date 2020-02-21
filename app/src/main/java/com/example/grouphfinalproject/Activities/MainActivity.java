@@ -1,5 +1,6 @@
 package com.example.grouphfinalproject.Activities;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -26,7 +26,6 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.DatabaseHandlers.ObjectSerializer;
-import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
 import java.io.File;
@@ -50,6 +49,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setTitle("Categories");
+
+
+
 
         databaseHelper = new DatabaseHelper(this);
         sharedPreferences = this.getSharedPreferences("com.example.grouphfinalproject",Context.MODE_PRIVATE);
@@ -187,7 +192,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 category = input.getText().toString();
-                catList.add(category);
+
+                if (!catList.contains(category.toUpperCase())){
+
+                    catList.add(category.toUpperCase());
+                }
+                else {
+                    Toast.makeText(MainActivity.this,  category.toUpperCase() +" Already Exists !", Toast.LENGTH_SHORT).show();
+
+                }
+
 
 
                 try {

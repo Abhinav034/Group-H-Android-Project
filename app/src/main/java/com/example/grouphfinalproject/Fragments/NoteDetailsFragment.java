@@ -175,8 +175,8 @@ public class NoteDetailsFragment extends Fragment {
                 }
 
 
-                if (!catList.contains(cat)) {
-                    catList.add(cat);
+                if (!catList.contains(cat.toUpperCase())) {
+                    catList.add(cat.toUpperCase());
                     try {
                         sharedPreferences.edit().putString(CATEGORY_LIST, ObjectSerializer.serialize(catList)).apply();
 
