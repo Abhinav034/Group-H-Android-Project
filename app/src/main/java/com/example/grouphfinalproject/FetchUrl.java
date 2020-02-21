@@ -36,8 +36,10 @@ public class FetchUrl {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            inputStream.close();
-            httpURLConnection.disconnect();
+            if(inputStream != null){
+                inputStream.close();
+                httpURLConnection.disconnect();
+            }
         }
 
         return data;

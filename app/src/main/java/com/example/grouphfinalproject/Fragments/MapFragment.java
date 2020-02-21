@@ -74,16 +74,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = getDirectionsUrl();
-                Object [] dataTransfer = new Object[4];
+                if(destination != null){
+                    String url = getDirectionsUrl();
+                    Object [] dataTransfer = new Object[4];
 
-                dataTransfer[0] = mMap;
-                dataTransfer[1] = url;
-                dataTransfer[2] = new LatLng(destination.latitude , destination.longitude);
-                dataTransfer[3] = new LatLng(currentLocation.latitude , currentLocation.longitude);
+                    dataTransfer[0] = mMap;
+                    dataTransfer[1] = url;
+                    dataTransfer[2] = new LatLng(destination.latitude , destination.longitude);
+                    dataTransfer[3] = new LatLng(currentLocation.latitude , currentLocation.longitude);
 
-                GetRouteData getRouteData = new GetRouteData();
-                getRouteData.execute(dataTransfer);
+                    GetRouteData getRouteData = new GetRouteData();
+                    getRouteData.execute(dataTransfer);
+
+                }
             }
         });
         return view;
@@ -116,7 +119,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
           public void onLocationResult(LocationResult locationResult) {
               for(Location location : locationResult.getLocations()){
 
-                  setHomeMarker(location);
+                //  setHomeMarker(location);
                   location.getLatitude();
                   location.getLongitude();
 
