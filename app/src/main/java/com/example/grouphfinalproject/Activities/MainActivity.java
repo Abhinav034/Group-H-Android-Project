@@ -4,7 +4,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.SearchView;
@@ -31,13 +29,10 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.grouphfinalproject.Adapters.CategoryAdaptor;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.DatabaseHandlers.ObjectSerializer;
-import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import static com.example.grouphfinalproject.R.color.theme_color;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -139,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(MainActivity.this , NotesActivity.class);
+                Intent intent = new Intent(MainActivity.this , NotesListActivity.class);
                 intent.putExtra(CATEGORY_KEY, catList.get(position));
                 startActivity(intent);
 

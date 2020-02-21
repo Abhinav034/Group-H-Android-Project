@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,9 +30,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.grouphfinalproject.Activities.Main2Activity;
+import com.example.grouphfinalproject.Activities.NoteActivity;
 import com.example.grouphfinalproject.Adapters.NoteImageAdapter;
-import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
 import java.io.File;
@@ -78,9 +76,9 @@ public class NoteImagesFragment extends Fragment {
             requestCameraPermission();
         }
 
-        if(Main2Activity.noteModelData != null){
+        if(NoteActivity.noteModelData != null){
             File sdCard = Environment.getExternalStorageDirectory();
-            directory = new File(sdCard.getAbsolutePath() + "/Notes/Images/" + Main2Activity.noteModelData.getId());
+            directory = new File(sdCard.getAbsolutePath() + "/Notes/Images/" + NoteActivity.noteModelData.getId());
             if(!directory.exists())
                 directory.mkdirs();
             else
@@ -226,14 +224,10 @@ public class NoteImagesFragment extends Fragment {
     }
 
     private void pickFromGallery(){
-        //Create an Intent with action as ACTION_PICK
         Intent intent=new Intent(Intent.ACTION_PICK);
-        // Sets the type as image/*. This ensures only components of type image are selected
         intent.setType("image/*");
-        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
         String[] mimeTypes = {"image/jpeg", "image/png"};
         intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
-        // Launching the Intent
         startActivityForResult(intent,GALLERY_REQUEST_CODE);
     }
 
@@ -305,7 +299,7 @@ public class NoteImagesFragment extends Fragment {
 
             File files[] = directory.listFiles();
             if(files != null){
-                String fileName = String.format("image_%d_%d.png", Main2Activity.noteModelData.getId(), files.length);
+                String fileName = String.format("image_%d_%d.png", NoteActivity.noteModelData.getId(), files.length);
                 File outFile = new File(directory, fileName);
                 outFile.createNewFile();
                 Log.d(TAG, "onPictureTaken - wrote to " + outFile.getAbsolutePath());

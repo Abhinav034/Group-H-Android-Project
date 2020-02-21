@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -20,13 +19,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import com.example.grouphfinalproject.Activities.Main2Activity;
-import com.example.grouphfinalproject.Activities.MapsActivity;
-import com.example.grouphfinalproject.Activities.NotesActivity;
+import com.example.grouphfinalproject.Activities.NoteActivity;
 import com.example.grouphfinalproject.GetRouteData;
-import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -35,7 +30,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -233,10 +227,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         }
 
-        if(Main2Activity.noteModelData != null) {
-            destination = new LatLng(Main2Activity.noteModelData.getLatitude(), Main2Activity.noteModelData.getLongitude());
-              Main2Activity.noteModelData.getLatitude();
-                Main2Activity.noteModelData.getLongitude();
+        if(NoteActivity.noteModelData != null) {
+            destination = new LatLng(NoteActivity.noteModelData.getLatitude(), NoteActivity.noteModelData.getLongitude());
+              NoteActivity.noteModelData.getLatitude();
+                NoteActivity.noteModelData.getLongitude();
 
 //            LatLng latLng = new LatLng(dlat, dlng);
             MarkerOptions options = new MarkerOptions()

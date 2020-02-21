@@ -53,7 +53,7 @@ public class CategoryAdaptor extends ArrayAdapter {
 
         cat.setText(cat_list.get(position));
 
-        size.setText("( " +db.getAllNotes(cat_list.get(position)).getCount() + " )");
+        size.setText(String.valueOf(db.getAllNotes(cat_list.get(position)).getCount()));
 
 
 

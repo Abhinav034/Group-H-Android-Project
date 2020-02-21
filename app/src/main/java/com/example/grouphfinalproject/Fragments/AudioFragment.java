@@ -6,19 +6,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,16 +28,13 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.example.grouphfinalproject.Activities.Main2Activity;
+import com.example.grouphfinalproject.Activities.NoteActivity;
 import com.example.grouphfinalproject.Adapters.AudioNoteAdapter;
-import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
-import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AudioFragment extends Fragment {
     private static final int AUDIO_REQUEST_CODE = 100;
@@ -83,13 +75,13 @@ public class AudioFragment extends Fragment {
             requestAudioPermission();
 
 
-        if(Main2Activity.noteModelData != null){
+        if(NoteActivity.noteModelData != null){
             Log.i(TAG, "onViewCreated: model not null");
 
 //            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + noteModel.getId() + "/_1" + ".3gp";
 
             File root = Environment.getExternalStorageDirectory();
-            directory = new File(root.getAbsolutePath() + "/Notes/Audio/" + Main2Activity.noteModelData.getId());
+            directory = new File(root.getAbsolutePath() + "/Notes/Audio/" + NoteActivity.noteModelData.getId());
             if (!directory.exists()) {
                 directory.mkdirs();
             } else{
@@ -220,10 +212,10 @@ public class AudioFragment extends Fragment {
     private void setPath(){
 
 //        File root = Environment.getExternalStorageDirectory();
-//        File folder = new File(root.getAbsolutePath() + "/" + Main2Activity.noteModelData.getId());
+//        File folder = new File(root.getAbsolutePath() + "/" + NoteActivity.noteModelData.getId());
         File files[] = directory.listFiles();
         if(files != null) {
-            path = directory.getPath() + "/" + Main2Activity.noteModelData.getId() + "_" + files.length + ".3gp";
+            path = directory.getPath() + "/" + NoteActivity.noteModelData.getId() + "_" + files.length + ".3gp";
 
             Log.i(TAG, "setPath: " + path);
             if (files.length != 0) {

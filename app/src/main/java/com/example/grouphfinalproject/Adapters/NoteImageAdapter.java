@@ -46,8 +46,9 @@ public class NoteImageAdapter extends BaseAdapter {
 
         ImageView imageView = convertView.findViewById(R.id.imageview);
 
-        Log.i("imageAdapter", "getView: " + imagesPathList.get(position));
+//        Log.i("imageAdapter", "getView: " + imagesPathList.get(position));
         File imgFile = new File(imagesPathList.get(position));
+
         if(imgFile.exists()){
 
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());

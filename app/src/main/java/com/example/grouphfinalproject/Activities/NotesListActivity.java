@@ -8,15 +8,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.Spinner;
@@ -34,7 +31,7 @@ import com.example.grouphfinalproject.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class NotesActivity extends AppCompatActivity {
+public class NotesListActivity extends AppCompatActivity {
 
     public static final String SELECTED_NOTE = "selectedNote" ;
     ImageButton btnAddNewNote;
@@ -103,11 +100,11 @@ public class NotesActivity extends AppCompatActivity {
         btnAddNewNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(NotesActivity.this, Main2Activity.class);
+                Intent i = new Intent(NotesListActivity.this, NoteActivity.class);
                 i.putExtra(MainActivity.CATEGORY_KEY,categoryName);
                 startActivity(i);
 
-//                Intent intent = new Intent(NotesActivity.this, Main2Activity.class);
+//                Intent intent = new Intent(NotesListActivity.this, NoteActivity.class);
 //                startActivity(intent);
             }
         });
@@ -116,7 +113,7 @@ public class NotesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent i = new Intent(NotesActivity.this, Main2Activity.class);
+                Intent i = new Intent(NotesListActivity.this, NoteActivity.class);
                 i.putExtra(SELECTED_NOTE, notesList.get(position));
                 startActivity(i);
 
@@ -156,11 +153,11 @@ public class NotesActivity extends AppCompatActivity {
                             loadListData();
 
 
-                            Toast.makeText(NotesActivity.this , "Note Deleted!!" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NotesListActivity.this , "Note Deleted!!" , Toast.LENGTH_SHORT).show();
                         }else{
 
 
-                            Toast.makeText(NotesActivity.this , "Failed to delete Note!" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NotesListActivity.this , "Failed to delete Note!" , Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -207,7 +204,7 @@ public class NotesActivity extends AppCompatActivity {
 
                     }
 
-                    adapter = new NoteListAdapter(NotesActivity.this , R.layout.notes_list_layout ,SearchList, databaseHelper );
+                    adapter = new NoteListAdapter(NotesListActivity.this , R.layout.notes_list_layout ,SearchList, databaseHelper );
                     listView.setAdapter(adapter);
                     isSearching = true;
                 }else{

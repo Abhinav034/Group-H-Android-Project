@@ -2,12 +2,9 @@ package com.example.grouphfinalproject.Fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -23,7 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.example.grouphfinalproject.Activities.Main2Activity;
+import com.example.grouphfinalproject.Activities.NoteActivity;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.DatabaseHandlers.ObjectSerializer;
 import com.example.grouphfinalproject.Models.NoteModel;
@@ -33,11 +30,8 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -95,12 +89,12 @@ public class NoteDetailsFragment extends Fragment {
         etcategory = view.findViewById(R.id.et_note_category);
         btnsave = view.findViewById(R.id.btn_save_note);
 
-        if (Main2Activity.noteModelData != null) {
+        if (NoteActivity.noteModelData != null) {
 
             noteExists = true;
-            etTitle.setText(Main2Activity.noteModelData.getTitle());
-            etcategory.setText(Main2Activity.noteModelData.getCategory());
-            etDescription.setText(Main2Activity.noteModelData.getDescription());
+            etTitle.setText(NoteActivity.noteModelData.getTitle());
+            etcategory.setText(NoteActivity.noteModelData.getCategory());
+            etDescription.setText(NoteActivity.noteModelData.getDescription());
         } else if (category != null) {
             etcategory.setText(category);
         }
@@ -154,7 +148,7 @@ public class NoteDetailsFragment extends Fragment {
 
                 if (noteExists) {
                     Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + cat);
-                    if (mDatabaseHelper.updateNote(Main2Activity.noteModelData.getId(), title, descp, cat))
+                    if (mDatabaseHelper.updateNote(NoteActivity.noteModelData.getId(), title, descp, cat))
                         Toast.makeText(getContext(), "Note updated successfully!!", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getContext(), "Error in updating note.", Toast.LENGTH_SHORT).show();
@@ -221,7 +215,7 @@ public class NoteDetailsFragment extends Fragment {
         if (cursor.moveToLast()) {
 
             // here we are updating noteModelData variable
-            Main2Activity.noteModelData = new NoteModel(
+            NoteActivity.noteModelData = new NoteModel(
                     cursor.getInt(0),
                     cursor.getString(1),
                     cursor.getString(2),

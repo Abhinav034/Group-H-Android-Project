@@ -1,7 +1,5 @@
 package com.example.grouphfinalproject.Activities;
 
-import androidx.annotation.DrawableRes;
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +9,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Window;
@@ -27,7 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import static com.example.grouphfinalproject.Activities.MainActivity.CATEGORY_KEY;
 
-public class Main2Activity extends AppCompatActivity {
+public class NoteActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
     public static NoteModel noteModelData;
@@ -49,7 +46,7 @@ public class Main2Activity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#1792F2")));
 
         intent = getIntent();
-        noteModelData = (NoteModel) intent.getSerializableExtra(NotesActivity.SELECTED_NOTE);
+        noteModelData = (NoteModel) intent.getSerializableExtra(NotesListActivity.SELECTED_NOTE);
 
 
 
@@ -76,7 +73,6 @@ public class Main2Activity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener mItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            Fragment fragment;
             switch (menuItem.getItemId()){
                 case R.id.navigation_note:
                     actionBar.setTitle("Note");
