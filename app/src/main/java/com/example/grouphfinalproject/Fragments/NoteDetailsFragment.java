@@ -148,7 +148,7 @@ public class NoteDetailsFragment extends Fragment {
 
                 if (noteExists) {
                     Log.i(TAG, "onClick: " + etTitle.getText().toString() + "...." + cat);
-                    if (mDatabaseHelper.updateNote(NoteActivity.noteModelData.getId(), title, descp, cat))
+                    if (mDatabaseHelper.updateNote(NoteActivity.noteModelData.getId(), title, descp, cat.toUpperCase()))
                         Toast.makeText(getContext(), "Note updated successfully!!", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getContext(), "Error in updating note.", Toast.LENGTH_SHORT).show();

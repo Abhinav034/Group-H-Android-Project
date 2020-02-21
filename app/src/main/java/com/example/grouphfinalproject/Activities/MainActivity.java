@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public static SharedPreferences sharedPreferences;
 
     public static  ArrayList<String> catList = new ArrayList<>();
-    ArrayList<String> SearchList;
+    ArrayList<String> SearchList = new ArrayList<>();
     Boolean isSearching = false;
     CategoryAdaptor arrayAdapter;
 
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(MainActivity.this , NotesListActivity.class);
-                intent.putExtra(CATEGORY_KEY, catList.get(position));
+                intent.putExtra(CATEGORY_KEY, isSearching ? SearchList.get(position) :catList.get(position));
                 startActivity(intent);
 
 
@@ -187,8 +187,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                             // add code to delete media file
-                            catList.remove(categoryToDelete);
-                            SearchList.remove(categoryToDelete);
+                            catList.remove(categoryToDelete.toUpperCase());
+                            SearchList.remove(categoryToDelete.toUpperCase());
 
 
 

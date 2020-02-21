@@ -114,7 +114,7 @@ public class NotesListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent i = new Intent(NotesListActivity.this, NoteActivity.class);
-                i.putExtra(SELECTED_NOTE, notesList.get(position));
+                i.putExtra(SELECTED_NOTE, isSearching ? SearchList.get(position) :notesList.get(position));
                 startActivity(i);
 
             }
