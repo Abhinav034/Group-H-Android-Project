@@ -106,6 +106,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+
     public boolean removeNote(String ColumnName, String Value){
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();

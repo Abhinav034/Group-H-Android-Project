@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,8 +26,10 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.DatabaseHandlers.ObjectSerializer;
+import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -96,11 +100,33 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
 
 
+
+                Cursor cursor = databaseHelper.getAllNotes(catList.get(position));
+
+
+                if (cursor.moveToFirst()) {
+                    do {
+
+
+                        // files getting deleted
+                        int idToDelete = cursor.getInt(0);
+                        deleteAudioandImages(idToDelete);
+
+
+
+                    } while (cursor.moveToNext());
+                    cursor.close();
+                }
+
+
+
                         databaseHelper.removeNote(DatabaseHelper.COLUMN_CATEGORY, catList.get(position));
 
 
                             // add code to delete media file
                             catList.remove(position);
+
+
 
 
                             try {
@@ -185,8 +211,25 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    public void deleteAudioandImages(int noteID){
+        File sdCard = Environment.getExternalStorageDirectory();
+        File imageDirectory = new File(sdCard.getAbsolutePath() + "/Notes/Images/" + noteID);
+        deleteRecursive(imageDirectory);
 
+        File audioDirectory = new File(sdCard.getAbsolutePath() + "/Notes/Audio/" + noteID);
+        deleteRecursive(audioDirectory);
+    }
 
+    public void deleteRecursive(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
+        }
+
+        fileOrDirectory.delete();
+    }
 
 
 }

@@ -118,9 +118,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
           public void onLocationResult(LocationResult locationResult) {
               for(Location location : locationResult.getLocations()){
 
-//                  setHomeMarker(location);
-//                  olat = location.getLatitude();
-//                  olng = location.getLongitude();
+//                 setHomeMarker(location);
+                  olat = location.getLatitude();
+                  olng = location.getLongitude();
 
                   mMap.setMyLocationEnabled(true);
 
@@ -181,20 +181,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-//        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//
-//            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-//
-//
-//        } else {
-//            requestPermissions( new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-//
-//        }
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+
+
+        } else {
+            requestPermissions( new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        }
 
         if(Main2Activity.noteModelData != null) {
             destination = new LatLng(Main2Activity.noteModelData.getLatitude(), Main2Activity.noteModelData.getLongitude());
-//            dlat = Main2Activity.noteModelData.getLatitude();
-//            dlng = Main2Activity.noteModelData.getLongitude();
+             dlat = Main2Activity.noteModelData.getLatitude();
+            dlng = Main2Activity.noteModelData.getLongitude();
 
 //            LatLng latLng = new LatLng(dlat, dlng);
             MarkerOptions options = new MarkerOptions()

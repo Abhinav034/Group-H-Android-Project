@@ -50,6 +50,7 @@ public class AudioFragment extends Fragment {
     String path;
 //    private NoteModel noteModel;
     SwipeMenuListView lvAudio;
+    File directory;
 
     public static final String TAG = "Audio";
 
@@ -88,9 +89,9 @@ public class AudioFragment extends Fragment {
 //            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + noteModel.getId() + "/_1" + ".3gp";
 
             File root = Environment.getExternalStorageDirectory();
-            File file = new File(root.getAbsolutePath() + "/" + Main2Activity.noteModelData.getId());
-            if (!file.exists()) {
-                file.mkdirs();
+            directory = new File(root.getAbsolutePath() + "/Notes/Audio/" + Main2Activity.noteModelData.getId());
+            if (!directory.exists()) {
+                directory.mkdirs();
             } else{
                 getPaths();
             }
@@ -218,11 +219,11 @@ public class AudioFragment extends Fragment {
 
     private void setPath(){
 
-        File root = Environment.getExternalStorageDirectory();
-        File folder = new File(root.getAbsolutePath() + "/" + Main2Activity.noteModelData.getId());
-        File files[] = folder.listFiles();
+//        File root = Environment.getExternalStorageDirectory();
+//        File folder = new File(root.getAbsolutePath() + "/" + Main2Activity.noteModelData.getId());
+        File files[] = directory.listFiles();
         if(files != null) {
-            path = folder.getPath() + "/" + Main2Activity.noteModelData.getId() + "_" + files.length + ".3gp";
+            path = directory.getPath() + "/" + Main2Activity.noteModelData.getId() + "_" + files.length + ".3gp";
 
             Log.i(TAG, "setPath: " + path);
             if (files.length != 0) {
@@ -242,9 +243,8 @@ public class AudioFragment extends Fragment {
 
     private void getPaths(){
         audioPaths.clear();
-        File root = Environment.getExternalStorageDirectory();
-        File folder = new File(root.getAbsolutePath() + "/" + Main2Activity.noteModelData.getId());
-        File files[] = folder.listFiles();
+
+        File files[] = directory.listFiles();
         if(files != null) {
             if (files.length != 0) {
                 for (int i = 0; i < files.length; i++) {

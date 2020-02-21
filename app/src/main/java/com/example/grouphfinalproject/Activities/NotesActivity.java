@@ -7,21 +7,23 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.grouphfinalproject.Adapters.NoteListAdapter;
 import com.example.grouphfinalproject.DatabaseHandlers.DatabaseHelper;
 import com.example.grouphfinalproject.Models.NoteModel;
 import com.example.grouphfinalproject.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class NotesActivity extends AppCompatActivity {
@@ -32,8 +34,10 @@ public class NotesActivity extends AppCompatActivity {
     ArrayList<NoteModel> notesList;
     String categoryName;
 
-    private ArrayAdapter arrayAdapter;
+    //private ArrayAdapter arrayAdapter;
+    NoteListAdapter adapter;
     DatabaseHelper databaseHelper;
+    public static final String TAG = "Notes List";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +100,11 @@ public class NotesActivity extends AppCompatActivity {
                         boolean removed = databaseHelper.removeNote(DatabaseHelper.COLUMN_ID, String.valueOf(notesList.get(position).getId()));
                         if (removed){
 
+
+                            deleteAudioandImages(notesList.get(position).getId());
                             // add media file delete code here
                             loadListData();
+
 
                             Toast.makeText(NotesActivity.this , "Note Deleted!!" , Toast.LENGTH_SHORT).show();
                         }else{
@@ -161,18 +168,30 @@ public class NotesActivity extends AppCompatActivity {
             } while (cursor.moveToNext());
             cursor.close();
         }
+        
+        adapter = new NoteListAdapter(this , R.layout.notes_list_layout ,notesList, databaseHelper );
+        listView.setAdapter(adapter);
 
-        // this part has to be replaced by custom adaptor
-        String[] titleArray = new String[notesList.size()];
+    }
 
-        for(int i = 0; i < notesList.size(); i++){
+    public void deleteAudioandImages(int noteID){
+        File sdCard = Environment.getExternalStorageDirectory();
+        File imageDirectory = new File(sdCard.getAbsolutePath() + "/Notes/Images/" + noteID);
+            deleteRecursive(imageDirectory);
 
-            titleArray[i] = notesList.get(i).getTitle();
+        File audioDirectory = new File(sdCard.getAbsolutePath() + "/Notes/Audio/" + noteID);
+        deleteRecursive(audioDirectory);
+    }
+
+
+    public void deleteRecursive(File fileOrDirectory) {
+
+        if (fileOrDirectory.isDirectory()) {
+            for (File child : fileOrDirectory.listFiles()) {
+                deleteRecursive(child);
+            }
         }
 
-
-        arrayAdapter = new ArrayAdapter(this , android.R.layout.simple_list_item_1 ,titleArray );
-        listView.setAdapter(arrayAdapter);
-
+        fileOrDirectory.delete();
     }
 }

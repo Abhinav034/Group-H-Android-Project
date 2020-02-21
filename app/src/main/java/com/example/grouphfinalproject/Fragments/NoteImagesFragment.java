@@ -54,6 +54,7 @@ public class NoteImagesFragment extends Fragment {
 
     GridView gridView;
     ArrayList<String> imagesPath = new ArrayList<>();
+    int selectedPosition = -1;
 
 
     @Nullable
@@ -79,14 +80,11 @@ public class NoteImagesFragment extends Fragment {
 
         if(Main2Activity.noteModelData != null){
             File sdCard = Environment.getExternalStorageDirectory();
-            directory = new File(sdCard.getAbsolutePath() + "/NotesImages/" + Main2Activity.noteModelData.getId());
+            directory = new File(sdCard.getAbsolutePath() + "/Notes/Images/" + Main2Activity.noteModelData.getId());
             if(!directory.exists())
                 directory.mkdirs();
             else
-                showImagesInGridView();
-
-            NoteImageAdapter imageAdapter = new NoteImageAdapter(getContext(), imagesPath);
-            gridView.setAdapter(imageAdapter);
+                getImagesFromPath();
 
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -94,6 +92,7 @@ public class NoteImagesFragment extends Fragment {
                     Toast.makeText(getContext(), "Image selected " + position, Toast.LENGTH_SHORT).show();
                     rlList.setClickable(false);
                     rlZoomImage.setVisibility(View.VISIBLE);
+                    selectedPosition = position;
 
                     File imgFile = new File(imagesPath.get(position));
                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -105,6 +104,22 @@ public class NoteImagesFragment extends Fragment {
             tvNoNotes.setVisibility(View.VISIBLE);
             rlOuterLayer.setVisibility(View.GONE);
         }
+
+        view.findViewById(R.id.btn_remove_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedPosition >= 0) {
+                    File file = new File(imagesPath.get(selectedPosition));
+                    if (file.delete())
+                        Toast.makeText(getContext(), "Note image deleted successfully!!", Toast.LENGTH_SHORT).show();
+
+                    getImagesFromPath();
+                    rlZoomImage.setVisibility(View.GONE);
+                    selectedPosition = -1;
+                }
+            }
+        });
+
 
         view.findViewById(R.id.iv_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +184,7 @@ public class NoteImagesFragment extends Fragment {
                     public void onClick(View v) {
                         storeToDevice();
                         alertDialog.dismiss();
+                        getImagesFromPath();
 //                        llButtons.setVisibility(View.VISIBLE);
 //                        llImage.setVisibility(View.GONE);
 
@@ -177,6 +193,8 @@ public class NoteImagesFragment extends Fragment {
 
             }
         });
+
+
     }
 
     private boolean checkCameraPermission(){
@@ -311,7 +329,7 @@ public class NoteImagesFragment extends Fragment {
 
     }
 
-    private void showImagesInGridView(){
+    private void getImagesFromPath(){
 
         imagesPath.clear();
         File files[] = directory.listFiles();
@@ -331,5 +349,8 @@ public class NoteImagesFragment extends Fragment {
         } else{
             Log.i(TAG, "showImagesInGridView: null directory");
         }
+
+        NoteImageAdapter imageAdapter = new NoteImageAdapter(getContext(), imagesPath);
+        gridView.setAdapter(imageAdapter);
     }
 }

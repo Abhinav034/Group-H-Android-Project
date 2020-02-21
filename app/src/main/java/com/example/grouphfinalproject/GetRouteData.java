@@ -71,7 +71,7 @@ public class GetRouteData extends AsyncTask<Object , String , String> {
                 .position(userLocation)
                 .icon(BitmapDescriptorFactory.defaultMarker());
 
-        map.addMarker(options1);
+       // map.addMarker(options1);
 
 
                 if (customPosition != null){
